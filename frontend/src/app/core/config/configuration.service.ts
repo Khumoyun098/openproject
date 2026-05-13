@@ -100,6 +100,10 @@ export class ConfigurationService {
     return this.systemPreference('allowedLinkProtocols') || null;
   }
 
+  public get attachmentWhitelist():string[] {
+    return this.systemPreference<string[]>('attachmentWhitelist') ?? [];
+  }
+  
   public dateFormatPresent():boolean {
     return !!this.systemPreference('dateFormat');
   }

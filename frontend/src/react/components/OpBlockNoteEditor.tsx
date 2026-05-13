@@ -36,7 +36,7 @@ import { BlockNoteView } from '@blocknote/mantine';
 import { getDefaultReactSlashMenuItems, SuggestionMenuController, useCreateBlockNote } from '@blocknote/react';
 import { HocuspocusProvider } from '@hocuspocus/provider';
 import { initializeOpBlockNoteExtensions, openProjectWorkPackageBlockSpec, openProjectWorkPackageSlashMenu } from 'op-blocknote-extensions';
-import { useCallback, useEffect, useMemo } from 'react';
+import { useCallback, useEffect, useMemo, useRef } from 'react';
 import * as Y from 'yjs';
 import { useBlockNoteAttachments } from '../hooks/useBlockNoteAttachments';
 import { useBlockNoteLocale } from '../hooks/useBlockNoteLocale';
@@ -79,7 +79,19 @@ export function OpBlockNoteEditor({
   doc,
 }:OpBlockNoteEditorProps) {
   const { localeString, localeDictionary } = useBlockNoteLocale(window.I18n.locale);
-  const { enabled: attachmentsEnabled, uploadFile } = useBlockNoteAttachments(attachmentsCollectionKey, attachmentsUploadUrl);
+
+  // useBlockNoteAttachments needs the editor instance to remove a stuck
+  // placeholder block on failed uploads, but the editor is created later
+  // in this function. We pass a lazy getter that reads from a ref assigned
+  // after useCreateBlockNote, breaking the would-be circular dependency.
+  const editorRef = useRef<ReturnType<typeof useCreateBlockNote> | null>(null);
+  const getEditor = useCallback(() => editorRef.current, []);
+
+  const { enabled: attachmentsEnabled, uploadFile } = useBlockNoteAttachments(
+    attachmentsCollectionKey,
+    attachmentsUploadUrl,
+    getEditor,
+  );
 
   useEffect(() => {
     initializeOpBlockNoteExtensions({ baseUrl: openProjectUrl, locale: localeString });
@@ -113,6 +125,8 @@ export function OpBlockNoteEditor({
   }, [hocuspocusProvider, doc, activeUser, localeDictionary, attachmentsEnabled, uploadFile, captureExternalLinks]);
 
   const editor = useCreateBlockNote(editorParams, [activeUser]);
+  editorRef.current = editor;
+
   type EditorType = typeof editor;
   const theme = useOpTheme();
 
