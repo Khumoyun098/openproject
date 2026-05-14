@@ -31,7 +31,6 @@
 import { IUploadFile } from 'core-app/core/upload/upload.service';
 import { useCallback } from 'react';
 import { firstValueFrom } from 'rxjs';
-import type { BlockNoteEditor } from '@blocknote/core';
 import { useAttachmentValidation } from './useAttachmentValidation';
 
 export interface BlockNoteAttachmentsResult {
@@ -39,10 +38,14 @@ export interface BlockNoteAttachmentsResult {
   uploadFile?:(file:File, blockId?:string) => Promise<string>;
 }
 
+export interface BlockNoteEditorRef {
+  removeBlocks:(ids:string[]) => void;
+}
+
 export function useBlockNoteAttachments(
   attachmentsCollectionKey:string,
   attachmentsUploadUrl:string,
-  getEditor?:() => BlockNoteEditor<any, any, any> | null,
+  getEditor?:() => BlockNoteEditorRef | null,
 ):BlockNoteAttachmentsResult {
   const enabled = (
     attachmentsCollectionKey !== undefined &&

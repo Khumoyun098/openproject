@@ -118,11 +118,12 @@ module API
 
         property :attachment_whitelist,
                  getter: ->(*) {
-                    raw = Setting.attachment_whitelist
-                    Array(raw).flat_map { |entry| entry.to_s.split(/\r?\n/) }
-                              .map(&:strip)
-                              .reject(&:blank?)
+                   raw = Setting.attachment_whitelist
+                   Array(raw).flat_map { |entry| entry.to_s.split(/\r?\n/) }
+                             .map(&:strip)
+                             .compact_blank
                  }
+
         property :user_preferences,
                  embedded: true,
                  exec_context: :decorator,

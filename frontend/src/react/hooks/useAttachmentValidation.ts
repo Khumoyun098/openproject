@@ -58,7 +58,7 @@ export function useAttachmentValidation() {
     return {
       valid: false,
       reason: window.I18n.t(
-        'js.activerecord.errors.models.attachment.attributes.content_type.not_allowlisted',
+        'js.error_attachment_type_not_allowed',
         { value: file.type },
       ),
     };
