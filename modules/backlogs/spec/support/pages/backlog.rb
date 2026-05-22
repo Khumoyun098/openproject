@@ -216,6 +216,18 @@ module Pages
       end
     end
 
+    def expect_work_package_in_backlog_bucket(work_package, bucket)
+      within_backlog_bucket(bucket) do
+        expect(page).to have_css(work_package_selector(work_package))
+      end
+    end
+
+    def expect_no_work_package_in_backlog_bucket(work_package, bucket)
+      within_backlog_bucket(bucket) do
+        expect(page).to have_no_css(work_package_selector(work_package))
+      end
+    end
+
     def expect_inbox_show_more
       within_inbox do
         expect(page).to have_css("#inbox_project_#{project.id}_show_more")
@@ -268,40 +280,32 @@ module Pages
       end
     end
 
-    def click_in_inbox_move_menu(work_package, item_name, wait: true)
-      button = within(work_package_selector(work_package)) do
-        find(:button, accessible_name: "Work package actions")
-      end
-      menu = open_controlled_menu(button)
-      submenu = open_move_submenu(menu)
-      wait_for_turbo_stream(wait:) do
-        submenu.find(:menuitem, text: item_name).click
-      end
-    end
-
-    def within_sprint_story_menu(story, &)
-      within(work_package_selector(story)) do
+    def within_work_package_menu(work_package, &)
+      within(work_package_selector(work_package)) do
         button = find(:button, accessible_name: "Work package actions")
         within(open_controlled_menu(button), &)
       end
 
-      dismiss_menu(story)
+      dismiss_menu(work_package)
     end
 
-    def click_in_sprint_story_menu(story, item_name)
-      within_sprint_story_menu(story) do |menu|
+    def click_in_work_package_menu(work_package, item_name)
+      within_work_package_menu(work_package) do |menu|
         menu.find(:menuitem, text: item_name).click
       end
     end
 
-    def click_in_sprint_story_move_menu(story, item_name, wait: true)
-      button = within(work_package_selector(story)) do
-        find(:button, accessible_name: "Work package actions")
+    def click_in_work_package_move_menu(work_package, item_name, wait: true)
+      within_work_package_move_menu(work_package) do |submenu|
+        wait_for_turbo_stream(wait:) do
+          submenu.find(:menuitem, text: item_name).click
+        end
       end
-      menu = open_controlled_menu(button)
-      submenu = open_move_submenu(menu)
-      wait_for_turbo_stream(wait:) do
-        submenu.find(:menuitem, text: item_name).click
+    end
+
+    def within_work_package_move_menu(work_package, &)
+      within_work_package_menu(work_package) do |menu|
+        yield open_move_submenu(menu)
       end
     end
 

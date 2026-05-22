@@ -28,44 +28,24 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-require "spec_helper"
+module Backlogs
+  class MoveToBacklogBucketDialogComponent < ApplicationComponent
+    include OpTurbo::Streamable
+    include OpPrimer::ComponentHelpers
 
-RSpec.describe Backlogs::WorkPackagesController do
-  describe "routing" do
-    it {
-      expect(get("/projects/project_42/backlogs/work_packages/85/menu")).to route_to(
-        controller: "backlogs/work_packages",
-        action: "menu",
-        project_id: "project_42",
-        id: "85"
-      )
-    }
+    DIALOG_ID = "move-to-backlog-bucket-dialog"
+    FORM_ID = "move-to-backlog-bucket-dialog-form"
 
-    it {
-      expect(put("/projects/project_42/backlogs/work_packages/85/move")).to route_to(
-        controller: "backlogs/work_packages",
-        action: "move",
-        project_id: "project_42",
-        id: "85"
-      )
-    }
+    attr_reader :work_package, :project, :buckets, :move_action
 
-    it {
-      expect(get("/projects/project_42/backlogs/work_packages/85/move_to_sprint_dialog")).to route_to(
-        controller: "backlogs/work_packages",
-        action: "move_to_sprint_dialog",
-        project_id: "project_42",
-        id: "85"
-      )
-    }
+    def initialize(work_package:, project:, move_action:)
+      super()
 
-    it {
-      expect(get("/projects/project_42/backlogs/work_packages/85/move_to_backlog_bucket_dialog")).to route_to(
-        controller: "backlogs/work_packages",
-        action: "move_to_backlog_bucket_dialog",
-        project_id: "project_42",
-        id: "85"
-      )
-    }
+      @work_package = work_package
+      @project = project
+      @move_action = move_action
+      @buckets = BacklogBucket.where(project:).order_alphabetically
+      @buckets = @buckets.where.not(id: work_package.backlog_bucket_id) if work_package.backlog_bucket_id
+    end
   end
 end

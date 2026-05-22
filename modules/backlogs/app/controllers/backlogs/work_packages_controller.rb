@@ -44,10 +44,15 @@ module Backlogs
                                  .where.not(id: @work_package.sprint_id)
                                  .exists?
 
+      other_buckets_exist = BacklogBucket.where(project: @project)
+                                   .where.not(id: @work_package.backlog_bucket_id)
+                                   .exists?
+
       render(Backlogs::WorkPackageCardMenuComponent.new(
                project: @project,
                work_package:,
                open_sprints_exist:,
+               other_buckets_exist:,
                current_user:
              ),
              layout: false)
@@ -55,6 +60,14 @@ module Backlogs
 
     def move_to_sprint_dialog
       respond_with_dialog Backlogs::MoveToSprintDialogComponent.new(
+        work_package: @work_package,
+        project: @project,
+        move_action: move_project_backlogs_work_package_path(@project, @work_package, helpers.all_backlogs_params)
+      )
+    end
+
+    def move_to_backlog_bucket_dialog
+      respond_with_dialog Backlogs::MoveToBacklogBucketDialogComponent.new(
         work_package: @work_package,
         project: @project,
         move_action: move_project_backlogs_work_package_path(@project, @work_package, helpers.all_backlogs_params)

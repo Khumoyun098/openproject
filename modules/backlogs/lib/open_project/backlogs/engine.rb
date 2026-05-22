@@ -82,7 +82,7 @@ module OpenProject::Backlogs
                    dependencies: %i[view_sprints manage_board_views manage_sprint_items]
 
         permission :manage_sprint_items,
-                   { "backlogs/work_packages": %i[move move_to_sprint_dialog] },
+                   { "backlogs/work_packages": %i[move move_to_sprint_dialog move_to_backlog_bucket_dialog] },
                    permissible_on: :project,
                    require: :member,
                    dependencies: %i[view_sprints edit_work_packages]
