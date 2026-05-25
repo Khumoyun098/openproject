@@ -31,6 +31,7 @@ import { FilterOperator } from 'core-app/shared/helpers/api-v3/api-v3-filter-bui
 import { TimezoneService } from 'core-app/core/datetime/timezone.service';
 import { HalResourceNotificationService } from 'core-app/features/hal/services/hal-resource-notification.service';
 import idFromLink from 'core-app/features/hal/helpers/id-from-link';
+import { formatWorkPackageId } from 'core-app/shared/helpers/work-package-id-pattern';
 import { OpCalendarService } from 'core-app/features/calendar/op-calendar.service';
 import { SchemaResource } from 'core-app/features/hal/resources/schema-resource';
 import { IFieldSchema } from 'core-app/shared/components/fields/field.base';
@@ -619,7 +620,9 @@ export class TimeEntryCalendarComponent implements AfterViewInit, OnDestroy {
 
   private entityName(entry:TimeEntryResource):string {
     const entity = entry.entity;
-    return `#${idFromLink(entity.href)}: ${entity.name}`;
+    const displayId = entity.$source._links?.self?.displayId as string | undefined;
+    const formattedId = displayId ? formatWorkPackageId(displayId) : `#${idFromLink(entity.href)}`;
+    return `${formattedId}: ${entity.name}`;
   }
 
   private popoverHtml(

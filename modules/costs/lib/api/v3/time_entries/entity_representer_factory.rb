@@ -76,14 +76,21 @@ module API
 
         def create_link_lambda(name, getter: "#{name}_id")
           ->(*) {
-            v3_path = API::V3::TimeEntries::EntityRepresenterFactory.representer_type(represented.send(name))
-            title_attribute = API::V3::TimeEntries::EntityRepresenterFactory.title_attribute(represented.send(name))
+            entity = represented.send(name)
+            v3_path = API::V3::TimeEntries::EntityRepresenterFactory.representer_type(entity)
+            title_attribute = API::V3::TimeEntries::EntityRepresenterFactory.title_attribute(entity)
 
-            instance_exec(&self.class.associated_resource_default_link_lambda(name,
-                                                                              v3_path:,
-                                                                              skip_link: -> { false },
-                                                                              title_attribute:,
-                                                                              getter:))
+            link = instance_exec(&self.class.associated_resource_default_link_lambda(name,
+                                                                                     v3_path:,
+                                                                                     skip_link: -> { false },
+                                                                                     title_attribute:,
+                                                                                     getter:))
+
+            if link.is_a?(Hash) && entity.is_a?(WorkPackage)
+              link.merge(displayId: entity.display_id.to_s)
+            else
+              link
+            end
           }
         end
 
