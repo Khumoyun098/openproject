@@ -90,7 +90,7 @@ module Pages
     end
 
     def expect_work_packages_in_inbox_in_order(work_packages: [])
-      within_inbox do
+      within_backlog_inbox do
         expect_work_packages_in_order work_packages:
       end
     end
@@ -139,13 +139,13 @@ module Pages
     end
 
     def expect_inbox_blankslate
-      within_inbox do
+      within_backlog_inbox do
         expect(page).to have_css("h4", text: "Backlog inbox is empty")
       end
     end
 
     def expect_no_inbox_blankslate
-      within_inbox do
+      within_backlog_inbox do
         expect(page).to have_no_css("h4", text: "Backlog inbox is empty")
       end
     end
@@ -205,13 +205,13 @@ module Pages
     end
 
     def expect_inbox_item(work_package)
-      within_inbox do
+      within_backlog_inbox do
         expect(page).to have_css(work_package_selector(work_package))
       end
     end
 
     def expect_no_inbox_item(work_package)
-      within_inbox do
+      within_backlog_inbox do
         expect(page).to have_no_css(work_package_selector(work_package))
       end
     end
@@ -229,20 +229,20 @@ module Pages
     end
 
     def expect_inbox_show_more
-      within_inbox do
+      within_backlog_inbox do
         expect(page).to have_css("#inbox_project_#{project.id}_show_more")
       end
     end
 
     def expect_no_inbox_show_more
       wait_for_network_idle
-      within_inbox do
+      within_backlog_inbox do
         expect(page).to have_no_css("#inbox_project_#{project.id}_show_more")
       end
     end
 
     def click_inbox_show_more
-      within_inbox do
+      within_backlog_inbox do
         find("#inbox_project_#{project.id}_show_more").click
       end
       wait_for_network_idle
@@ -254,30 +254,6 @@ module Pages
         open_controlled_menu(button).find(:menuitem, text: I18n.t(:"js.button_open_details")).click
       end
       expect_details_view(story)
-    end
-
-    def expect_inbox_items_in_order(*work_packages)
-      within_inbox do
-        selectors = work_packages.map { |wp| work_package_selector(wp) }
-        expect(page).to have_css(selectors.join(" + "))
-      end
-
-      wait_for_network_idle
-    end
-
-    def within_inbox_menu(work_package, &)
-      within(work_package_selector(work_package)) do
-        button = find(:button, accessible_name: "Work package actions")
-        within(open_controlled_menu(button), &)
-      end
-
-      dismiss_menu(work_package)
-    end
-
-    def click_in_inbox_menu(work_package, item_name)
-      within_inbox_menu(work_package) do |menu|
-        menu.find(:menuitem, text: item_name).click
-      end
     end
 
     def within_work_package_menu(work_package, &)
@@ -315,14 +291,6 @@ module Pages
       wait_for_turbo_stream do
         moved_element.native.drag_to(target_element.native, delay: 0.1)
       end
-    rescue Capybara::Cuprite::ObsoleteNode
-      retry
-    end
-
-    def drag_sprint_item_to_inbox(work_package)
-      moved_element = find(draggable_work_package_selector(work_package))
-      target_element = find(list_body_selector("#inbox_project_#{project.id}"))
-      moved_element.native.drag_to(target_element.native, delay: 0.1)
     rescue Capybara::Cuprite::ObsoleteNode
       retry
     end
@@ -369,12 +337,6 @@ module Pages
 
     def expect_work_packages_in_backlog_bucket_in_order(bucket, work_packages: [])
       within_backlog_bucket(bucket) do
-        expect_work_packages_in_order(work_packages:)
-      end
-    end
-
-    def expect_work_packages_in_backlog_inbox_in_order(work_packages: [])
-      within_backlog_inbox do
         expect_work_packages_in_order(work_packages:)
       end
     end
@@ -624,10 +586,6 @@ module Pages
 
     def within_sprint(sprint, &)
       within(sprint_selector(sprint), &)
-    end
-
-    def within_inbox(&)
-      within("#inbox_project_#{project.id}", &)
     end
 
     def within_backlog_bucket(bucket, &)

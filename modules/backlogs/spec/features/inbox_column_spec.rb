@@ -217,14 +217,14 @@ RSpec.describe "Inbox column in sprint planning view", :js do
       planning_page.expect_inbox_item(inbox_wp1)
       planning_page.expect_inbox_item(inbox_wp2)
       planning_page.expect_inbox_item(inbox_wp3)
-      planning_page.expect_inbox_items_in_order(inbox_wp1, inbox_wp2, inbox_wp3)
+      planning_page.expect_work_packages_in_inbox_in_order(work_packages: [inbox_wp1, inbox_wp2, inbox_wp3])
       planning_page.expect_no_inbox_blankslate
     end
 
     it "allows reordering items via the kebab menu", :aggregate_failures do
       # First item has no upward actions
 
-      planning_page.within_inbox_menu(inbox_wp1) do |menu|
+      planning_page.within_work_package_menu(inbox_wp1) do |menu|
         planning_page.within_move_submenu(menu) do |submenu|
           expect(submenu).to have_no_selector(:menuitem, text: "Move to top")
           expect(submenu).to have_no_selector(:menuitem, text: "Move up")
@@ -236,7 +236,7 @@ RSpec.describe "Inbox column in sprint planning view", :js do
       wait_for_network_idle
 
       # Last item has no downward actions
-      planning_page.within_inbox_menu(inbox_wp3) do |menu|
+      planning_page.within_work_package_menu(inbox_wp3) do |menu|
         planning_page.within_move_submenu(menu) do |submenu|
           expect(submenu).to have_selector(:menuitem, text: "Move to top")
           expect(submenu).to have_selector(:menuitem, text: "Move up")
@@ -248,19 +248,19 @@ RSpec.describe "Inbox column in sprint planning view", :js do
       wait_for_network_idle
 
       planning_page.click_in_work_package_move_menu(inbox_wp1, "Move down")
-      planning_page.expect_inbox_items_in_order(inbox_wp2, inbox_wp1, inbox_wp3)
+      planning_page.expect_work_packages_in_inbox_in_order(work_packages: [inbox_wp2, inbox_wp1, inbox_wp3])
 
       planning_page.click_in_work_package_move_menu(inbox_wp1, "Move down")
-      planning_page.expect_inbox_items_in_order(inbox_wp2, inbox_wp3, inbox_wp1)
+      planning_page.expect_work_packages_in_inbox_in_order(work_packages: [inbox_wp2, inbox_wp3, inbox_wp1])
 
       planning_page.click_in_work_package_move_menu(inbox_wp2, "Move to bottom")
-      planning_page.expect_inbox_items_in_order(inbox_wp3, inbox_wp1, inbox_wp2)
+      planning_page.expect_work_packages_in_inbox_in_order(work_packages: [inbox_wp3, inbox_wp1, inbox_wp2])
 
       planning_page.click_in_work_package_move_menu(inbox_wp2, "Move to top")
-      planning_page.expect_inbox_items_in_order(inbox_wp2, inbox_wp3, inbox_wp1)
+      planning_page.expect_work_packages_in_inbox_in_order(work_packages: [inbox_wp2, inbox_wp3, inbox_wp1])
 
       planning_page.click_in_work_package_move_menu(inbox_wp1, "Move up")
-      planning_page.expect_inbox_items_in_order(inbox_wp2, inbox_wp1, inbox_wp3)
+      planning_page.expect_work_packages_in_inbox_in_order(work_packages: [inbox_wp2, inbox_wp1, inbox_wp3])
     end
 
     describe "moving backlog items to a sprint via the 'Move to sprint' menu item" do
@@ -406,10 +406,10 @@ RSpec.describe "Inbox column in sprint planning view", :js do
       before { planning_page.visit! }
 
       it "moves all sprint items back to the inbox" do
-        planning_page.drag_sprint_item_to_inbox(sprint_wp1)
+        planning_page.drag_work_package_to_backlog_inbox(sprint_wp1)
         wait_for_network_idle
 
-        planning_page.drag_sprint_item_to_inbox(sprint_wp2)
+        planning_page.drag_work_package_to_backlog_inbox(sprint_wp2)
         wait_for_network_idle
 
         planning_page.expect_story_not_in_sprint(sprint_wp1, sprint)
