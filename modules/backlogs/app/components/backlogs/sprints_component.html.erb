@@ -31,7 +31,7 @@ See COPYRIGHT and LICENSE files for more details.
   render(Primer::Beta::Subhead.new(hide_border: true, pb: 0)) do |head|
     head.with_heading(tag: :h3, size: :medium, font_weight: :bold) { Sprint.human_model_name.pluralize }
 
-    if allow_sprint_creation?(project)
+    if sprint_creation_allowed?
       head.with_actions do
         render Primer::Beta::Button.new(
           tag: :a,

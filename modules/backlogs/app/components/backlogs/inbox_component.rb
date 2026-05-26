@@ -30,6 +30,7 @@
 
 module Backlogs
   class InboxComponent < ApplicationComponent
+    include OpPrimer::ComponentHelpers
     include OpTurbo::Streamable
     include CommonHelper
 

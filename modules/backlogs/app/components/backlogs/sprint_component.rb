@@ -120,9 +120,5 @@ module Backlogs
     def show_burndown_link?
       sprint.active?
     end
-
-    def user_allowed?(permission)
-      current_user.allowed_in_project?(permission, project)
-    end
   end
 end
