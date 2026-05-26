@@ -67,7 +67,7 @@ module Backlogs
     end
 
     def allowed_to_manage_sprint_items?
-      current_user.allowed_in_project?(:manage_sprint_items, project)
+      user_allowed?(:manage_sprint_items)
     end
 
     def build_move_menu(menu)

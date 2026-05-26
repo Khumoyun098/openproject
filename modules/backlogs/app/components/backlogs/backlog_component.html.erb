@@ -49,7 +49,7 @@ See COPYRIGHT and LICENSE files for more details.
         )
       end
 
-      if allow_backlog_bucket_creation?(project)
+      if backlog_bucket_creation_allowed?
         head.with_actions do
           render Primer::Beta::Button.new(
             tag: :a,
@@ -64,7 +64,7 @@ See COPYRIGHT and LICENSE files for more details.
             BacklogBucket.human_model_name
           end
         end
-      elsif allow_sprint_creation?(project)
+      elsif sprint_creation_allowed?
         # Ugly hack:
         # This button will not be rendered, but still takes up space to push the left side down a bit.
         # Remove as soon as the `+ Sprint` button moves from the Subhead into a SubHeader.
