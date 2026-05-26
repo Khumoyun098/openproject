@@ -59,7 +59,7 @@ RSpec.describe "Move to backlog", :js do
 
       it "moves the work package to the backlog inbox" do
         planning_page.visit!
-        planning_page.click_in_work_package_move_menu(work_package, "Move to inbox")
+        planning_page.click_in_work_package_move_submenu(work_package, "Move to inbox")
 
         wait_for_network_idle
 
@@ -73,11 +73,11 @@ RSpec.describe "Move to backlog", :js do
 
       it "moves the work package to the backlog inbox" do
         planning_page.visit!
-        planning_page.click_in_work_package_move_menu(work_package, "Move to inbox")
+        planning_page.click_in_work_package_move_submenu(work_package, "Move to inbox")
 
         wait_for_network_idle
 
-        planning_page.expect_no_work_package_in_backlog_bucket(work_package, bucket_a)
+        planning_page.expect_work_package_not_in_backlog_bucket(work_package, bucket_a)
         planning_page.expect_inbox_item(work_package)
       end
     end
@@ -89,7 +89,7 @@ RSpec.describe "Move to backlog", :js do
 
       it "opens the dialog and moves the work package to the selected bucket" do
         planning_page.visit!
-        planning_page.click_in_work_package_move_menu(work_package, "Move to backlog bucket")
+        planning_page.click_in_work_package_move_submenu(work_package, "Move to backlog bucket")
 
         within("#move-to-backlog-bucket-dialog") do
           select bucket_b.name, from: "target_id"
@@ -108,7 +108,7 @@ RSpec.describe "Move to backlog", :js do
 
       it "opens the dialog and moves the work package to the selected bucket" do
         planning_page.visit!
-        planning_page.click_in_work_package_move_menu(work_package, "Move to backlog bucket")
+        planning_page.click_in_work_package_move_submenu(work_package, "Move to backlog bucket")
 
         within("#move-to-backlog-bucket-dialog") do
           select bucket_a.name, from: "target_id"
@@ -127,7 +127,7 @@ RSpec.describe "Move to backlog", :js do
 
       it "opens the dialog excluding the current bucket, and moves to another bucket" do
         planning_page.visit!
-        planning_page.click_in_work_package_move_menu(work_package, "Move to backlog bucket")
+        planning_page.click_in_work_package_move_submenu(work_package, "Move to backlog bucket")
 
         within("#move-to-backlog-bucket-dialog") do
           expect(page).to have_no_css("option", text: bucket_a.name)
@@ -138,7 +138,7 @@ RSpec.describe "Move to backlog", :js do
 
         wait_for_network_idle
 
-        planning_page.expect_no_work_package_in_backlog_bucket(work_package, bucket_a)
+        planning_page.expect_work_package_not_in_backlog_bucket(work_package, bucket_a)
         planning_page.expect_work_package_in_backlog_bucket(work_package, bucket_b)
       end
     end
@@ -155,7 +155,7 @@ RSpec.describe "Move to backlog", :js do
         planning_page.visit!
         planning_page.expect_work_package_in_sprint(work_package, sprint)
 
-        planning_page.click_in_work_package_move_menu(work_package, "Move to sprint", wait: false)
+        planning_page.click_in_work_package_move_submenu(work_package, "Move to sprint", wait: false)
 
         within("#move-to-sprint-dialog") do
           expect(page).to have_no_select("target_id", with_options: [sprint.name])
@@ -177,7 +177,7 @@ RSpec.describe "Move to backlog", :js do
 
       it "opens the dialog and moves the work package to the selected sprint" do
         planning_page.visit!
-        planning_page.click_in_work_package_move_menu(work_package, "Move to sprint")
+        planning_page.click_in_work_package_move_submenu(work_package, "Move to sprint")
 
         within("#move-to-sprint-dialog") do
           select sprint.name, from: "target_id"
@@ -196,7 +196,7 @@ RSpec.describe "Move to backlog", :js do
 
       it "opens the dialog and moves the work package to the selected sprint" do
         planning_page.visit!
-        planning_page.click_in_work_package_move_menu(work_package, "Move to sprint")
+        planning_page.click_in_work_package_move_submenu(work_package, "Move to sprint")
 
         within("#move-to-sprint-dialog") do
           select sprint.name, from: "target_id"
@@ -205,7 +205,7 @@ RSpec.describe "Move to backlog", :js do
 
         wait_for_network_idle
 
-        planning_page.expect_no_work_package_in_backlog_bucket(work_package, bucket_a)
+        planning_page.expect_work_package_not_in_backlog_bucket(work_package, bucket_a)
         planning_page.expect_work_package_in_sprint(work_package, sprint)
       end
     end
