@@ -167,8 +167,8 @@ en:
       start_sprint_disabled_reason_active_sprint: "Another sprint is already active."
       start_sprint_disabled_reason_missing_dates: "Start and finish dates are required in order to start the sprint."
       action_menu:
+        add_new_work_package: "Add new work package"
         edit_sprint: "Edit sprint"
-        add_work_package: "Add work package"
 
     sprints_component:
       blankslate:
