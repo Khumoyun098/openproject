@@ -39,41 +39,10 @@ module Pages
       @project = project
     end
 
-    def alter_attributes_in_details_view(story, **attributes)
-      within_details_view(story) do |details_view|
-        attributes.each do |key, value|
-          details_view
-            .edit_field(key.to_s.camelize(:lower))
-            .update(value)
-
-          details_view.expect_and_dismiss_toaster message: "Successful update."
-        end
-      end
-    end
-
-    def edit_story_in_details_view(story, **attributes)
-      click_in_story_menu(story, "Open details view")
-
-      alter_attributes_in_details_view(story, **attributes)
-    end
-
     def click_in_sprint_menu(sprint, item_name)
       within_sprint_menu(sprint) do |menu|
         menu.find(:menuitem, text: item_name).click
       end
-    end
-
-    def click_in_story_menu(story, item_name)
-      within_story_menu(story) do |menu|
-        menu.find(:menuitem, text: item_name).click
-      end
-    end
-
-    def drag_in_sprint(moved, target, before: true)
-      moved_element = find(story_selector(moved))
-      target_element = find(story_selector(target))
-
-      drag_n_drop_element from: moved_element, to: target_element, offset_x: 0, offset_y: before ? -5 : +10
     end
 
     def sprint_names_in_order
@@ -248,16 +217,16 @@ module Pages
       wait_for_network_idle
     end
 
-    def open_sprint_story_details(story)
-      within(work_package_selector(story)) do
+    def open_work_package_details(work_package)
+      within_work_package(work_package) do
         button = find(:button, accessible_name: "Work package actions")
         open_controlled_menu(button).find(:menuitem, text: I18n.t(:"js.button_open_details")).click
       end
-      expect_details_view(story)
+      expect_details_view(work_package)
     end
 
     def within_work_package_menu(work_package, &)
-      within(work_package_selector(work_package)) do
+      within_work_package(work_package) do
         button = find(:button, accessible_name: "Work package actions")
         within(open_controlled_menu(button), &)
       end
@@ -353,12 +322,6 @@ module Pages
       end
     end
 
-    def expect_no_new_backlog_bucket_button
-      within_owner_backlogs do
-        expect(page).to have_no_link(BacklogBucket.human_model_name, exact: true)
-      end
-    end
-
     def expect_backlog_bucket_dialog
       expect(page).to have_dialog(I18n.t(:label_backlog_bucket_new))
     end
@@ -417,17 +380,17 @@ module Pages
       retry
     end
 
-    def expect_story_in_sprint(story, sprint)
+    def expect_work_package_in_sprint(work_package, sprint)
       within_sprint(sprint) do
         expect(page)
-          .to have_selector(work_package_selector(story).to_s)
+          .to have_selector(work_package_selector(work_package).to_s)
       end
     end
 
-    def expect_story_not_in_sprint(story, sprint)
+    def expect_work_package_not_in_sprint(work_package, sprint)
       within_sprint(sprint) do
         expect(page)
-          .to have_no_selector(work_package_selector(story).to_s)
+          .to have_no_selector(work_package_selector(work_package).to_s)
       end
     end
 
@@ -437,7 +400,7 @@ module Pages
       end
     end
 
-    def expect_sprint_story_count(sprint, count)
+    def expect_sprint_work_package_count(sprint, count)
       within(sprint_selector(sprint)) do
         expect(page).to have_css(
           ".Counter",
@@ -465,25 +428,12 @@ module Pages
       project_backlogs_backlog_path(project)
     end
 
-    def within_story_menu(story, &)
-      within_story(story) do
-        button = find(:button, accessible_name: "Work package actions")
-        within(open_controlled_menu(button), &)
-      end
-    end
-
-    def within_details_view(story, &)
-      details_view = expect_details_view(story)
-
-      yield details_view
-    end
-
-    def expect_details_view(story)
-      details_view = Pages::PrimerizedSplitWorkPackage.new(story)
+    def expect_details_view(work_package)
+      details_view = Pages::PrimerizedSplitWorkPackage.new(work_package)
       details_view.expect_tab :overview
       details_view.expect_subject
 
-      expect(page).to have_current_path project_backlogs_backlog_details_path(story.project, story),
+      expect(page).to have_current_path project_backlogs_backlog_details_path(work_package.project, work_package),
                                         ignore_query: true
       wait_for_network_idle
 
@@ -527,10 +477,6 @@ module Pages
       end
 
       dismiss_menu(sprint)
-    end
-
-    def within_work_package_row(work_package, &)
-      within(work_package_selector(work_package), &)
     end
 
     def click_start_sprint_button(sprint)
@@ -580,8 +526,8 @@ module Pages
 
     private
 
-    def within_story(story, &)
-      within(story_selector(story), &)
+    def within_work_package(work_package, &)
+      within(work_package_selector(work_package), &)
     end
 
     def within_sprint(sprint, &)
@@ -627,10 +573,6 @@ module Pages
         .all(:section, section_element: :section, heading_level: 4)
         .select { |section| section[:id].to_s.start_with?(id_prefix) }
         .map { |section| section.first(:heading, level: 4).text }
-    end
-
-    def story_selector(story)
-      "#story_#{story.id}"
     end
 
     def work_package_selector(work_package)

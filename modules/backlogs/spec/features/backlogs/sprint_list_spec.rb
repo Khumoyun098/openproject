@@ -54,7 +54,7 @@ RSpec.describe "Sprint list", :js do
       backlog_page.visit!
 
       backlog_page.expect_sprint_story_points(sprint, 8)
-      backlog_page.expect_sprint_story_count(sprint, 2)
+      backlog_page.expect_sprint_work_package_count(sprint, 2)
     end
   end
 end

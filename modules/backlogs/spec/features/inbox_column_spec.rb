@@ -281,7 +281,7 @@ RSpec.describe "Inbox column in sprint planning view", :js do
         end
 
         planning_page.expect_no_inbox_item(inbox_wp1)
-        planning_page.expect_story_in_sprint(inbox_wp1, sprint)
+        planning_page.expect_work_package_in_sprint(inbox_wp1, sprint)
         planning_page.expect_work_packages_in_sprint_in_order(sprint, work_packages: [sprint_wp, inbox_wp1])
       end
 
@@ -306,7 +306,7 @@ RSpec.describe "Inbox column in sprint planning view", :js do
 
           # Item was *not* moved:
           planning_page.expect_inbox_item(inbox_wp1)
-          planning_page.expect_story_not_in_sprint(inbox_wp1, sprint)
+          planning_page.expect_work_package_not_in_sprint(inbox_wp1, sprint)
         end
       end
     end
@@ -323,9 +323,9 @@ RSpec.describe "Inbox column in sprint planning view", :js do
         planning_page.expect_no_inbox_item(inbox_wp3)
 
         planning_page.expect_inbox_blankslate
-        planning_page.expect_story_in_sprint(inbox_wp1, sprint)
-        planning_page.expect_story_in_sprint(inbox_wp2, sprint)
-        planning_page.expect_story_in_sprint(inbox_wp3, sprint)
+        planning_page.expect_work_package_in_sprint(inbox_wp1, sprint)
+        planning_page.expect_work_package_in_sprint(inbox_wp2, sprint)
+        planning_page.expect_work_package_in_sprint(inbox_wp3, sprint)
       end
 
       context "with real authentication and a private project" do
@@ -412,8 +412,8 @@ RSpec.describe "Inbox column in sprint planning view", :js do
         planning_page.drag_work_package_to_backlog_inbox(sprint_wp2)
         wait_for_network_idle
 
-        planning_page.expect_story_not_in_sprint(sprint_wp1, sprint)
-        planning_page.expect_story_not_in_sprint(sprint_wp2, sprint)
+        planning_page.expect_work_package_not_in_sprint(sprint_wp1, sprint)
+        planning_page.expect_work_package_not_in_sprint(sprint_wp2, sprint)
         planning_page.expect_inbox_item(sprint_wp1)
         planning_page.expect_inbox_item(sprint_wp2)
       end
@@ -461,7 +461,7 @@ RSpec.describe "Inbox column in sprint planning view", :js do
       planning_page.expect_no_inbox_show_more
 
       # Open a sprint story details view, edit the subject, and close
-      details_view = planning_page.open_sprint_story_details(sprint_wp1)
+      details_view = planning_page.open_work_package_details(sprint_wp1)
       details_view.edit_field("subject").update("Updated subject")
       details_view.expect_and_dismiss_toaster message: "Successful update."
       details_view.close

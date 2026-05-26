@@ -83,8 +83,8 @@ RSpec.describe "Edit", :js do
   it "lists all open sprints" do
     planning_page.expect_sprint_names_in_order(first_sprint.name, second_sprint.name)
 
-    planning_page.expect_story_in_sprint(work_package, first_sprint)
-    planning_page.expect_story_not_in_sprint(work_package, second_sprint)
+    planning_page.expect_work_package_in_sprint(work_package, first_sprint)
+    planning_page.expect_work_package_not_in_sprint(work_package, second_sprint)
   end
 
   it "adds a work package to a sprint" do
@@ -102,7 +102,7 @@ RSpec.describe "Edit", :js do
     expect_and_dismiss_flash type: :success, exact_message: "Successful creation."
     created_wp = first_sprint.reload.work_packages.last
     expect(created_wp.subject).to eq("Story created in sprint")
-    planning_page.expect_story_in_sprint(created_wp, first_sprint)
+    planning_page.expect_work_package_in_sprint(created_wp, first_sprint)
   end
 
   context "with the 'create_sprints' permissions" do
