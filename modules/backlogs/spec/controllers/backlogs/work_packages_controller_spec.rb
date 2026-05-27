@@ -875,8 +875,8 @@ RSpec.describe Backlogs::WorkPackagesController do
 
     context "when the work package is in a bucket" do
       let(:current_bucket) { create(:backlog_bucket, project:) }
-      let(:other_project_bucket_wp) { create(:work_package, status:, project:, backlog_bucket: current_bucket) }
-      let(:params) { { project_id: project.id, id: other_project_bucket_wp.id } }
+      let(:current_bucket_wp) { create(:work_package, status:, project:, backlog_bucket: current_bucket) }
+      let(:params) { { project_id: project.id, id: current_bucket_wp.id } }
 
       it "responds with a dialog turbo stream" do
         subject

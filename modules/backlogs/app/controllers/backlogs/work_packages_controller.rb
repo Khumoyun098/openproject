@@ -36,23 +36,11 @@ module Backlogs
 
     # Deferred ActionMenu items (Primer include-fragment).
     def menu
-      work_package = displayed_work_packages.with_backlogs_neighbours.find(@work_package.id)
-
-      open_sprints_exist = Sprint.for_project(@project)
-                                 .visible
-                                 .not_completed
-                                 .where.not(id: @work_package.sprint_id)
-                                 .exists?
-
-      other_buckets_exist = BacklogBucket.where(project: @project)
-                                   .where.not(id: @work_package.backlog_bucket_id)
-                                   .exists?
-
       render(Backlogs::WorkPackageCardMenuComponent.new(
                project: @project,
                work_package:,
-               open_sprints_exist:,
-               other_buckets_exist:,
+               open_sprints_exist: open_sprints_exist?,
+               other_buckets_exist: other_buckets_exist?,
                current_user:
              ),
              layout: false)
@@ -140,6 +128,21 @@ module Backlogs
       else
         @work_packages.merge(WorkPackage.backlogs_inbox_for(project: @project))
       end
+    end
+
+    def work_package = displayed_work_packages.with_backlogs_neighbours.find(@work_package.id)
+
+    def open_sprints_exist?
+      Sprint.for_project(@project).visible
+                                  .not_completed
+                                  .where.not(id: @work_package.sprint_id)
+                                  .exists?
+    end
+
+    def other_buckets_exist?
+      BacklogBucket.where(project: @project)
+                   .where.not(id: @work_package.backlog_bucket_id)
+                   .exists?
     end
   end
 end
