@@ -32,7 +32,7 @@ module OpenProject::Backlogs::List
   extend ActiveSupport::Concern
 
   included do
-    acts_as_list touch_on_update: false, scope: %i[project_id backlog_bucket_id sprint_id]
+    acts_as_list touch_on_update: false, add_new_at: :top, scope: %i[project_id backlog_bucket_id sprint_id]
 
     # acts as list adds a before destroy hook which messes
     # with the parent_id_was value
