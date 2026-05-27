@@ -106,7 +106,6 @@ RSpec.describe API::V3::TimeEntries::TimeEntryRepresenter, "rendering" do
       end
 
       context "with semantic identifier mode active",
-              with_flag: { semantic_work_package_ids: true },
               with_settings: { work_packages_identifier: "semantic" } do
         let(:work_package) { build_stubbed(:work_package, identifier: "PROJ-42", project: workspace) }
 
