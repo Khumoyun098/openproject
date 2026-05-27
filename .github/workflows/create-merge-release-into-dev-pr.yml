@@ -107,7 +107,17 @@ jobs:
 
               TEMP_BRANCH="merge-$RELEASE_BRANCH-$(date "+%Y%m%d%H%M%S")"
 
-              git branch "$TEMP_BRANCH" "$RELEASE_BRANCH"
+              # If merge failed, abort it and add a commit that removes crowdin translation changes
+              if git merge --abort; then
+                git checkout -b "$TEMP_BRANCH" "$RELEASE_BRANCH"
+                git checkout "$BASE_BRANCH" -- "config/locales/crowdin/*.yml" "modules/*/config/locales/crowdin/*.yml"
+                if ! git diff --cached --quiet; then
+                  git commit -m "use crowdin translations from $BASE_BRANCH"
+                fi
+              else
+                # Otherwise use successfull merge commit for PR
+                git branch "$TEMP_BRANCH"
+              fi
 
               git push origin "$TEMP_BRANCH"
 
