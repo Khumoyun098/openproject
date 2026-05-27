@@ -107,8 +107,10 @@ en:
       blankslate_description: "Drag items here to add them."
       label_actions: "Backlog bucket actions"
       action_menu:
-        edit_backlog_bucket: "Edit backlog bucket"
+        add_existing_work_package: "Add existing work package"
+        add_new_work_package: "Add new work package"
         delete_backlog_bucket: "Delete backlog bucket"
+        edit_backlog_bucket: "Edit backlog bucket"
 
     burndown_chart:
       show:
@@ -134,6 +136,10 @@ en:
       title: "Inbox"
       blankslate_title: "Backlog inbox is empty"
       blankslate_description: "All open work packages in this project will automatically appear here."
+      label_actions: "Inbox actions"
+      action_menu:
+        add_existing_work_package: "Add existing work package"
+        add_new_work_package: "Add new work package"
       show_more:
         one: "Show 1 more item"
         other: "Show %{count} more items"
@@ -167,6 +173,7 @@ en:
       start_sprint_disabled_reason_active_sprint: "Another sprint is already active."
       start_sprint_disabled_reason_missing_dates: "Start and finish dates are required in order to start the sprint."
       action_menu:
+        add_existing_work_package: "Add existing work package"
         add_new_work_package: "Add new work package"
         edit_sprint: "Edit sprint"
 
