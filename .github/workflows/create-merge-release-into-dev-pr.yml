@@ -82,7 +82,14 @@ jobs:
           if git diff --exit-code --quiet ..."$RELEASE_BRANCH"; then
             echo "Nothing to merge from $RELEASE_BRANCH into $BASE_BRANCH"
           else
-            if git merge --no-edit --no-ff "$RELEASE_BRANCH" && git push origin "$BASE_BRANCH"; then
+            git merge --no-commit --no-ff "$RELEASE_BRANCH"
+
+            # ignore crowdin translations
+            git checkout HEAD -- "config/locales/crowdin/*.yml" "modules/*/config/locales/crowdin/*.yml"
+
+            if git diff --cached --quiet; then
+              echo "Nothing to merge from $RELEASE_BRANCH into $BASE_BRANCH, besides ignored crowdin translations"
+            elif git commit --no-edit && git push origin "$BASE_BRANCH"; then
               echo "Successfully merged $RELEASE_BRANCH into $BASE_BRANCH and pushed"
             else
               # Close all previous PRs with label
