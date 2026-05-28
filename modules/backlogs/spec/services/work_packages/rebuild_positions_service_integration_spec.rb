@@ -32,9 +32,11 @@ require "spec_helper"
 
 RSpec.describe WorkPackages::RebuildPositionsService, "integration", type: :model do
   def create_work_package(options)
-    create(:work_package, options.reverse_merge(project: options[:sprint]&.project || options[:backlog_bucket]&.project,
-                                                type_id: type.id)) do |wp|
-      wp.update_column(:position, options[:position]) if options.key?(:position)
+    container = options[:sprint] || options[:backlog_bucket]
+    project = container&.project
+
+    WorkPackage.acts_as_list_no_update do
+      create(:work_package, options.reverse_merge(project:, type_id: type.id))
     end
   end
 
@@ -50,49 +52,24 @@ RSpec.describe WorkPackages::RebuildPositionsService, "integration", type: :mode
   shared_let(:sprint1_wp1) { create_work_package(subject: "Sprint 1 WorkPackage 1", sprint: sprint1, position: nil) }
   shared_let(:sprint1_wp2) { create_work_package(subject: "Sprint 1 WorkPackage 2", sprint: sprint1, position: 1) }
   shared_let(:sprint1_wp3) { create_work_package(subject: "Sprint 1 WorkPackage 3", sprint: sprint1, position: 2) }
-  shared_let(:sprint1_wp4) do
-    create_work_package(subject: "Sprint 1 WorkPackage 4", sprint: sprint1, position: 2).tap do
-      # Force wp3 back to position 2 so that wp3 and wp4 are genuinely
-      # duplicated — the service must break the tie via created_at.
-      sprint1_wp3.update_column(:position, 2)
-    end
-  end
+  shared_let(:sprint1_wp4) { create_work_package(subject: "Sprint 1 WorkPackage 4", sprint: sprint1, position: 2) }
   shared_let(:sprint1_wp5) { create_work_package(subject: "Sprint 1 WorkPackage 5", sprint: sprint1, position: nil) }
 
   shared_let(:sprint2_wp1) { create_work_package(subject: "Sprint 2 WorkPackage 1", sprint: sprint2, position: 3) }
   shared_let(:sprint2_wp2) { create_work_package(subject: "Sprint 2 WorkPackage 2", sprint: sprint2, position: 2) }
-  shared_let(:sprint2_wp3) do
-    create_work_package(subject: "Sprint 2 WorkPackage 3", sprint: sprint2, position: 1).tap do
-      # acts_as_list inserts shift earlier siblings; restore them so
-      # the DB starts from the positions the test actually sets.
-      sprint2_wp1.update_column(:position, 3)
-      sprint2_wp2.update_column(:position, 2)
-    end
-  end
+  shared_let(:sprint2_wp3) { create_work_package(subject: "Sprint 2 WorkPackage 3", sprint: sprint2, position: 1) }
 
   shared_let(:sprint3_wp1) { create_work_package(subject: "Sprint 3 WorkPackage 1", sprint: sprint3, position: nil) }
   shared_let(:sprint3_wp2) { create_work_package(subject: "Sprint 3 WorkPackage 2", sprint: sprint3, position: nil) }
   shared_let(:sprint3_wp3) { create_work_package(subject: "Sprint 3 WorkPackage 3", sprint: sprint3, position: nil) }
 
-  shared_let(:inbox_wp1) do
-    create_work_package(subject: "Inbox WorkPackage 1", project: project1, position: nil)
-  end
-  shared_let(:inbox_wp2) do
-    create_work_package(subject: "Inbox WorkPackage 2", project: project1, position: nil)
-  end
-  shared_let(:inbox_wp3) do
-    create_work_package(subject: "Inbox WorkPackage 3", project: project1, position: nil)
-  end
+  shared_let(:inbox_wp1) { create_work_package(subject: "Inbox WorkPackage 1", project: project1, position: nil) }
+  shared_let(:inbox_wp2) { create_work_package(subject: "Inbox WorkPackage 2", project: project1, position: nil) }
+  shared_let(:inbox_wp3) { create_work_package(subject: "Inbox WorkPackage 3", project: project1, position: nil) }
 
   shared_let(:bucket1_wp1) { create_work_package(subject: "Bucket 1 WorkPackage 1", backlog_bucket: bucket1, position: nil) }
   shared_let(:bucket1_wp2) { create_work_package(subject: "Bucket 1 WorkPackage 2", backlog_bucket: bucket1, position: 2) }
-  shared_let(:bucket1_wp3) do
-    create_work_package(subject: "Bucket 1 WorkPackage 3", backlog_bucket: bucket1, position: 1).tap do
-      # acts_as_list inserts shift earlier siblings; restore them so
-      # the DB starts from the positions the test actually sets.
-      bucket1_wp2.update_column(:position, 2)
-    end
-  end
+  shared_let(:bucket1_wp3) { create_work_package(subject: "Bucket 1 WorkPackage 3", backlog_bucket: bucket1, position: 1) }
 
   shared_let(:bucket2_wp1) { create_work_package(subject: "Bucket 2 WorkPackage 1", backlog_bucket: bucket2, position: nil) }
   shared_let(:bucket2_wp2) { create_work_package(subject: "Bucket 2 WorkPackage 2", backlog_bucket: bucket2, position: nil) }
