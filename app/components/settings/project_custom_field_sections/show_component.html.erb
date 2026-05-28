@@ -64,7 +64,8 @@
               render(
                 Primer::Alpha::Dialog.new(
                   id: "project-custom-field-section-dialog#{@project_custom_field_section.id}", title: t("settings.project_attributes.label_new_section"),
-                  size: :medium_portrait
+                  size: :medium_portrait,
+                  data: { "keep-open-on-submit": true }
                 )
               ) do |_dialog|
                 render(Settings::ProjectCustomFieldSections::DialogBodyFormComponent.new(project_custom_field_section: @project_custom_field_section))
