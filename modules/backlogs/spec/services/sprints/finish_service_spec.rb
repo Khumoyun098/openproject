@@ -68,7 +68,7 @@ RSpec.describe Sprints::FinishService do
     it "completes the sprint ignoring the closed work package", :aggregate_failures do
       expect(result).to be_success
       expect(sprint.reload).to be_completed
-      expect(closed_wp.reload.sprint).to eq(sprint)
+      expect(closed_wp.reload).to have_attributes(sprint:)
     end
   end
 
@@ -86,7 +86,7 @@ RSpec.describe Sprints::FinishService do
       expect(result).to be_success
       expect(sprint.reload).to be_completed
       # The WP is not moved — it stays in the completed sprint.
-      expect(done_like_wp.reload.sprint).to eq(sprint)
+      expect(done_like_wp.reload).to have_attributes(sprint:)
     end
   end
 
@@ -100,7 +100,7 @@ RSpec.describe Sprints::FinishService do
         expect(result).not_to be_success
         expect(result.includes_error?(:base, :unfinished_work_packages)).to be true
         expect(sprint.reload).to be_active
-        expect(open_wp.reload.sprint).to eq(sprint)
+        expect(open_wp.reload).to have_attributes(sprint:)
       end
     end
 
@@ -112,7 +112,7 @@ RSpec.describe Sprints::FinishService do
       it "moves the open work packages and completes the sprint", :aggregate_failures do
         expect(result).to be_success
         expect(sprint.reload).to be_completed
-        expect(open_wp.reload.sprint).to eq(target_sprint)
+        expect(open_wp.reload).to have_attributes(sprint: target_sprint)
       end
     end
 
@@ -125,7 +125,7 @@ RSpec.describe Sprints::FinishService do
       it "returns failure on the work package update and leaves the sprint active", :aggregate_failures do
         expect(result).not_to be_success
         expect(sprint.reload).to be_active
-        expect(open_wp.reload.sprint).to eq(sprint)
+        expect(open_wp.reload).to have_attributes(sprint:)
       end
     end
 
@@ -139,8 +139,7 @@ RSpec.describe Sprints::FinishService do
       it "unassigns from sprint, completes the sprint, and places WP before existing backlog items", :aggregate_failures do
         expect(result).to be_success
         expect(sprint.reload).to be_completed
-        expect(open_wp.reload.sprint).to be_nil
-        expect(open_wp.reload.position).to be < existing_backlog_wp.reload.position
+        expect(open_wp.reload).to have_attributes(sprint: nil, position: be < existing_backlog_wp.reload.position)
       end
     end
 
@@ -154,8 +153,7 @@ RSpec.describe Sprints::FinishService do
       it "unassigns from sprint, completes the sprint, and places WP after existing backlog items", :aggregate_failures do
         expect(result).to be_success
         expect(sprint.reload).to be_completed
-        expect(open_wp.reload.sprint).to be_nil
-        expect(open_wp.reload.position).to be > existing_backlog_wp.reload.position
+        expect(open_wp.reload).to have_attributes(sprint: nil, position: be > existing_backlog_wp.reload.position)
       end
     end
   end
@@ -201,57 +199,21 @@ RSpec.describe Sprints::FinishService do
         expect(sprint.reload).to be_completed
 
         # In the project's sprint (the one the work packages were moved to)
-
-        open_wp1.reload
-        expect(open_wp1.sprint).to eq(target_sprint)
-        expect(open_wp1.position).to eq(1)
-        expect(open_wp1.project).to eq(project)
-
-        open_wp2.reload
-        expect(open_wp2.sprint).to eq(target_sprint)
-        expect(open_wp2.position).to eq(2)
-        expect(open_wp2.project).to eq(project)
-
-        open_wp3_target_sprint.reload
-        expect(open_wp3_target_sprint.sprint).to eq(target_sprint)
-        expect(open_wp3_target_sprint.position).to eq(3)
-        expect(open_wp3_target_sprint.project).to eq(project)
-
-        open_wp4_target_sprint.reload
-        expect(open_wp4_target_sprint.sprint).to eq(target_sprint)
-        expect(open_wp4_target_sprint.position).to eq(4)
-        expect(open_wp4_target_sprint.project).to eq(project)
+        expect(open_wp1.reload).to have_attributes(sprint: target_sprint, position: 1, project:)
+        expect(open_wp2.reload).to have_attributes(sprint: target_sprint, position: 2, project:)
+        expect(open_wp3_target_sprint.reload).to have_attributes(sprint: target_sprint, position: 3, project:)
+        expect(open_wp4_target_sprint.reload).to have_attributes(sprint: target_sprint, position: 4, project:)
 
         # In the project's backlog
-
-        open_wp5_backlog.reload
-        expect(open_wp5_backlog.sprint).to be_nil
-        expect(open_wp5_backlog.position).to eq(1)
-        expect(open_wp5_backlog.project).to eq(project)
+        expect(open_wp5_backlog.reload).to have_attributes(sprint: nil, position: 1, project:)
 
         # In the project's sprint
-
-        closed_wp.reload.sprint
-        expect(closed_wp.sprint).to eq(sprint)
-        expect(closed_wp.position).to eq(1)
-        expect(closed_wp.project).to eq(project)
+        expect(closed_wp.reload).to have_attributes(sprint:, position: 1, project:)
 
         # In the other project's target_sprint (newly added)
-
-        open_wp1_other_project.reload
-        expect(open_wp1_other_project.sprint).to eq(target_sprint)
-        expect(open_wp1_other_project.position).to eq(1)
-        expect(open_wp1_other_project.project).to eq(other_project)
-
-        open_wp2_other_project.reload
-        expect(open_wp2_other_project.sprint).to eq(target_sprint)
-        expect(open_wp2_other_project.position).to eq(2)
-        expect(open_wp2_other_project.project).to eq(other_project)
-
-        open_wp3_other_project_backlog.reload
-        expect(open_wp3_other_project_backlog.sprint).to be_nil
-        expect(open_wp3_other_project_backlog.position).to eq(1)
-        expect(open_wp3_other_project_backlog.project).to eq(other_project)
+        expect(open_wp1_other_project.reload).to have_attributes(sprint: target_sprint, position: 1, project: other_project)
+        expect(open_wp2_other_project.reload).to have_attributes(sprint: target_sprint, position: 2, project: other_project)
+        expect(open_wp3_other_project_backlog.reload).to have_attributes(sprint: nil, position: 1, project: other_project)
       end
     end
 
@@ -264,57 +226,21 @@ RSpec.describe Sprints::FinishService do
         expect(sprint.reload).to be_completed
 
         # In the project's backlog
-
-        open_wp1.reload
-        expect(open_wp1.sprint).to be_nil
-        expect(open_wp1.position).to eq(1)
-        expect(open_wp1.project).to eq(project)
-
-        open_wp2.reload
-        expect(open_wp2.sprint).to be_nil
-        expect(open_wp2.position).to eq(2)
-        expect(open_wp2.project).to eq(project)
-
-        open_wp5_backlog.reload
-        expect(open_wp5_backlog.sprint).to be_nil
-        expect(open_wp5_backlog.position).to eq(3)
-        expect(open_wp5_backlog.project).to eq(project)
+        expect(open_wp1.reload).to have_attributes(sprint: nil, position: 1, project:)
+        expect(open_wp2.reload).to have_attributes(sprint: nil, position: 2, project:)
+        expect(open_wp5_backlog.reload).to have_attributes(sprint: nil, position: 3, project:)
 
         # In the project's other sprint
-
-        open_wp3_target_sprint.reload
-        expect(open_wp3_target_sprint.sprint).to eq(target_sprint)
-        expect(open_wp3_target_sprint.position).to eq(1)
-        expect(open_wp3_target_sprint.project).to eq(project)
-
-        open_wp4_target_sprint.reload
-        expect(open_wp4_target_sprint.sprint).to eq(target_sprint)
-        expect(open_wp4_target_sprint.position).to eq(2)
-        expect(open_wp4_target_sprint.project).to eq(project)
+        expect(open_wp3_target_sprint.reload).to have_attributes(sprint: target_sprint, position: 1, project:)
+        expect(open_wp4_target_sprint.reload).to have_attributes(sprint: target_sprint, position: 2, project:)
 
         # In the project's sprint
-
-        closed_wp.reload.sprint
-        expect(closed_wp.sprint).to eq(sprint)
-        expect(closed_wp.position).to eq(1)
-        expect(closed_wp.project).to eq(project)
+        expect(closed_wp.reload).to have_attributes(sprint:, position: 1, project:)
 
         # In the other project's backlog
-
-        open_wp1_other_project.reload
-        expect(open_wp1_other_project.sprint).to be_nil
-        expect(open_wp1_other_project.position).to eq(1)
-        expect(open_wp1_other_project.project).to eq(other_project)
-
-        open_wp2_other_project.reload
-        expect(open_wp2_other_project.sprint).to be_nil
-        expect(open_wp2_other_project.position).to eq(2)
-        expect(open_wp2_other_project.project).to eq(other_project)
-
-        open_wp3_other_project_backlog.reload
-        expect(open_wp3_other_project_backlog.sprint).to be_nil
-        expect(open_wp3_other_project_backlog.position).to eq(3)
-        expect(open_wp3_other_project_backlog.project).to eq(other_project)
+        expect(open_wp1_other_project.reload).to have_attributes(sprint: nil, position: 1, project: other_project)
+        expect(open_wp2_other_project.reload).to have_attributes(sprint: nil, position: 2, project: other_project)
+        expect(open_wp3_other_project_backlog.reload).to have_attributes(sprint: nil, position: 3, project: other_project)
       end
     end
 
@@ -327,59 +253,22 @@ RSpec.describe Sprints::FinishService do
         expect(sprint.reload).to be_completed
 
         # In the project's backlog
-
-        open_wp5_backlog.reload
-        expect(open_wp5_backlog.sprint).to be_nil
-        expect(open_wp5_backlog.position).to eq(1)
-        expect(open_wp5_backlog.project).to eq(project)
-
-        open_wp1.reload
-        expect(open_wp1.sprint).to be_nil
-        expect(open_wp1.position).to eq(2)
-        expect(open_wp1.project).to eq(project)
-
-        open_wp2.reload
-        expect(open_wp2.sprint).to be_nil
-        expect(open_wp2.position).to eq(3)
-        expect(open_wp2.project).to eq(project)
+        expect(open_wp5_backlog.reload).to have_attributes(sprint: nil, position: 1, project:)
+        expect(open_wp1.reload).to have_attributes(sprint: nil, position: 2, project:)
+        expect(open_wp2.reload).to have_attributes(sprint: nil, position: 3, project:)
 
         # In the project's other sprint
-
-        open_wp3_target_sprint.reload
-        expect(open_wp3_target_sprint.sprint).to eq(target_sprint)
-        expect(open_wp3_target_sprint.position).to eq(1)
-        expect(open_wp3_target_sprint.project).to eq(project)
-
-        open_wp4_target_sprint.reload
-        expect(open_wp4_target_sprint.sprint).to eq(target_sprint)
-        expect(open_wp4_target_sprint.position).to eq(2)
-        expect(open_wp4_target_sprint.project).to eq(project)
+        expect(open_wp3_target_sprint.reload).to have_attributes(sprint: target_sprint, position: 1, project:)
+        expect(open_wp4_target_sprint.reload).to have_attributes(sprint: target_sprint, position: 2, project:)
 
         # In the project's sprint
-
-        closed_wp.reload.sprint
-        expect(closed_wp.sprint).to eq(sprint)
-        # This should be 1 but is 2
-        # expect(closed_wp.position).to eq(1)
-        expect(closed_wp.position).to eq(2)
-        expect(closed_wp.project).to eq(project)
+        # Position should be 1 but it is 2
+        expect(closed_wp.reload).to have_attributes(sprint:, position: 2, project:)
 
         # In the other project's backlog
-
-        open_wp3_other_project_backlog.reload
-        expect(open_wp3_other_project_backlog.sprint).to be_nil
-        expect(open_wp3_other_project_backlog.position).to eq(1)
-        expect(open_wp3_other_project_backlog.project).to eq(other_project)
-
-        open_wp1_other_project.reload
-        expect(open_wp1_other_project.sprint).to be_nil
-        expect(open_wp1_other_project.position).to eq(2)
-        expect(open_wp1_other_project.project).to eq(other_project)
-
-        open_wp2_other_project.reload
-        expect(open_wp2_other_project.sprint).to be_nil
-        expect(open_wp2_other_project.position).to eq(3)
-        expect(open_wp2_other_project.project).to eq(other_project)
+        expect(open_wp3_other_project_backlog.reload).to have_attributes(sprint: nil, position: 1, project: other_project)
+        expect(open_wp1_other_project.reload).to have_attributes(sprint: nil, position: 2, project: other_project)
+        expect(open_wp2_other_project.reload).to have_attributes(sprint: nil, position: 3, project: other_project)
       end
     end
   end
