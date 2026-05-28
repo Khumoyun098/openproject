@@ -28,17 +28,14 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-class UserCustomField < CustomField
-  belongs_to :user_custom_field_section, class_name: "UserCustomFieldSection", foreign_key: :custom_field_section_id,
-                                         inverse_of: :custom_fields
-
-  acts_as_list column: :position_in_custom_field_section, scope: [:custom_field_section_id]
-
-  validates :custom_field_section_id, presence: true
-
-  scopes :visible
-
-  def type_name
-    :label_user_plural
+class UserCustomFieldSection < CustomFieldSection
+  def untitled?
+    name.blank?
   end
+
+  has_many :custom_fields, -> { order(position_in_custom_field_section: :asc) },
+           class_name: "UserCustomField",
+           dependent: :destroy,
+           foreign_key: :custom_field_section_id,
+           inverse_of: :user_custom_field_section
 end

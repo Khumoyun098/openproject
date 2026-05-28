@@ -28,17 +28,47 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-class UserCustomField < CustomField
-  belongs_to :user_custom_field_section, class_name: "UserCustomFieldSection", foreign_key: :custom_field_section_id,
-                                         inverse_of: :custom_fields
+module Pages
+  module Admin
+    module Settings
+      module UserCustomFields
+        class Index < ::Pages::Page
+          def path
+            "/admin/settings/user_custom_fields"
+          end
 
-  acts_as_list column: :position_in_custom_field_section, scope: [:custom_field_section_id]
+          def expect_add_user_attribute_submenu(close: true)
+            within_add_menu(close:) do
+              expect(page).to have_test_selector("add-user-custom-field-attribute")
+            end
+          end
 
-  validates :custom_field_section_id, presence: true
+          def expect_no_add_user_attribute_submenu(close: true)
+            within_add_menu(close:) do
+              expect(page).to have_no_test_selector("add-user-custom-field-attribute")
+            end
+          end
 
-  scopes :visible
+          def click_to_create_new_custom_field(type)
+            within_add_menu do
+              click_button "User attribute"
+              click_on type
+            end
+            wait_for_network_idle
+          end
 
-  def type_name
-    :label_user_plural
+          private
+
+          def within_add_menu(close: false, &)
+            wait_for_network_idle
+
+            button = find_button("Add")
+            button.click
+            within(button.ancestor("action-menu").find("action-list"), &)
+            button.click if close
+          end
+        end
+      end
+    end
   end
 end

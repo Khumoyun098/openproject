@@ -354,6 +354,12 @@ Redmine::MenuManager.map :admin_menu do |menu|
             parent: :users_and_permissions,
             enterprise_feature: "placeholder_users"
 
+  menu.push :user_custom_fields_settings,
+            { controller: "/admin/settings/user_custom_fields", action: :index },
+            if: ->(_) { User.current.admin? },
+            caption: :label_user_attributes_plural,
+            parent: :users_and_permissions
+
   menu.push :groups,
             { controller: "/groups" },
             if: ->(_) { User.current.admin? },

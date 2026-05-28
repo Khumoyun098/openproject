@@ -28,17 +28,49 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-class UserCustomField < CustomField
-  belongs_to :user_custom_field_section, class_name: "UserCustomFieldSection", foreign_key: :custom_field_section_id,
-                                         inverse_of: :custom_fields
+module Settings
+  module UserCustomFieldSections
+    class IndexComponent < ApplicationComponent
+      include ApplicationHelper
+      include OpPrimer::ComponentHelpers
+      include OpTurbo::Streamable
 
-  acts_as_list column: :position_in_custom_field_section, scope: [:custom_field_section_id]
+      def initialize(user_custom_field_sections:)
+        super
 
-  validates :custom_field_section_id, presence: true
+        @user_custom_field_sections = user_custom_field_sections
+      end
 
-  scopes :visible
+      def row_component_class
+        Settings::UserCustomFieldSections::ShowComponent
+      end
 
-  def type_name
-    :label_user_plural
+      def first_and_last
+        [@user_custom_field_sections.first, @user_custom_field_sections.last]
+      end
+
+      private
+
+      def wrapper_data_attributes
+        {
+          controller: "generic-drag-and-drop"
+        }
+      end
+
+      def drop_target_config
+        {
+          generic_drag_and_drop_target: "container",
+          "target-allowed-drag-type": "section"
+        }
+      end
+
+      def draggable_item_config(section)
+        {
+          "draggable-id": section.id,
+          "draggable-type": "section",
+          "drop-url": drop_admin_settings_user_custom_field_section_path(section)
+        }
+      end
+    end
   end
 end

@@ -754,6 +754,32 @@ Rails.application.routes.draw do
           get :new_link
         end
       end
+
+      resources :user_custom_fields, controller: "/admin/settings/user_custom_fields" do
+        member do
+          delete "options/:option_id", action: "delete_option", as: :delete_option_of
+          post :reorder_alphabetical
+          put :move
+          put :drop
+
+          get :attribute_help_text
+          put :update_attribute_help_text
+
+          get :list_items
+        end
+      end
+
+      resources :user_custom_field_sections, controller: "/admin/settings/user_custom_field_sections",
+                                             only: %i[create update destroy] do
+        member do
+          put :move
+          put :drop
+        end
+        collection do
+          get :new_link
+        end
+      end
+
       resource :working_days_and_hours, controller: "/admin/settings/working_days_and_hours_settings", only: %i[show update] do
         post :confirm_changes
       end

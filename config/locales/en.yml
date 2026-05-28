@@ -1952,6 +1952,8 @@ en:
         workspace_type: "Workspace type"
       project_custom_field:
         custom_field_section: Section
+      user_custom_field:
+        custom_field_section: Section
       subproject_template_assignment:
         workspace_type: "Workspace type"
       project/phase:
@@ -4571,6 +4573,7 @@ en:
   label_user_menu: "User menu"
   label_user_new: "New user"
   label_user_plural: "Users"
+  label_user_attributes_plural: "User attributes"
   label_user_search: "Search for user"
   label_user_settings: "User settings"
   label_users_settings: "Users settings"
@@ -5663,6 +5666,18 @@ en:
             side_panel:
               label: "Side panel"
               description: "Add all the project attributes in a section inside the right side panel in the project overview."
+    user_attributes:
+      label_untitled_section: "Untitled section"
+      heading: "User attributes"
+      heading_description: "These user attributes appear on user profiles and information cards. You can add new attributes, group them into sections and re-order them."
+      label_new_attribute: "User attribute"
+      label_new_section: "Section"
+      label_edit_section: "Edit title"
+      label_section_actions: "Section actions"
+      label_user_custom_field_actions: "User attribute actions"
+      label_no_user_custom_fields: "No user attributes defined in this section"
+      new:
+        heading: "New attribute"
     project_initiation_request:
       header_description: >
         OpenProject can generate a step-by-step wizard to help project managers fill out a project initiation request.

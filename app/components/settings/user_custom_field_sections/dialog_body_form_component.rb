@@ -28,17 +28,33 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-class UserCustomField < CustomField
-  belongs_to :user_custom_field_section, class_name: "UserCustomFieldSection", foreign_key: :custom_field_section_id,
-                                         inverse_of: :custom_fields
+module Settings
+  module UserCustomFieldSections
+    class DialogBodyFormComponent < ApplicationComponent
+      include ApplicationHelper
+      include OpPrimer::ComponentHelpers
+      include OpTurbo::Streamable
 
-  acts_as_list column: :position_in_custom_field_section, scope: [:custom_field_section_id]
+      def initialize(user_custom_field_section: UserCustomFieldSection.new)
+        super
 
-  validates :custom_field_section_id, presence: true
+        @user_custom_field_section = user_custom_field_section
+      end
 
-  scopes :visible
+      private
 
-  def type_name
-    :label_user_plural
+      def wrapper_uniq_by
+        @user_custom_field_section.id
+      end
+
+      def form_config
+        {
+          model: @user_custom_field_section,
+          method: @user_custom_field_section.persisted? ? :put : :post,
+          url: @user_custom_field_section.persisted? ? admin_settings_user_custom_field_section_path(@user_custom_field_section) : admin_settings_user_custom_field_sections_path,
+          data: { turbo_stream: true }
+        }
+      end
+    end
   end
 end

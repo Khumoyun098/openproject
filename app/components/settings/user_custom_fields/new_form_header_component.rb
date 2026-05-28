@@ -28,17 +28,23 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-class UserCustomField < CustomField
-  belongs_to :user_custom_field_section, class_name: "UserCustomFieldSection", foreign_key: :custom_field_section_id,
-                                         inverse_of: :custom_fields
+module Settings
+  module UserCustomFields
+    class NewFormHeaderComponent < ApplicationComponent
+      def page_title
+        concat t("settings.user_attributes.new.heading")
+        concat render(Primer::Beta::Text.new(color: :muted)) { " (#{helpers.label_for_custom_field_format(model.field_format)})" }
+      end
 
-  acts_as_list column: :position_in_custom_field_section, scope: [:custom_field_section_id]
-
-  validates :custom_field_section_id, presence: true
-
-  scopes :visible
-
-  def type_name
-    :label_user_plural
+      def breadcrumb_items
+        [
+          { href: admin_index_path, text: t("label_administration") },
+          { href: admin_settings_user_custom_fields_path, text: t("label_user_and_permission") },
+          { href: admin_settings_user_custom_fields_path, text: t("settings.user_attributes.heading") },
+          helpers.nested_breadcrumb_element(helpers.label_for_custom_field_format(model.field_format),
+                                            t("settings.user_attributes.new.heading"))
+        ]
+      end
+    end
   end
 end

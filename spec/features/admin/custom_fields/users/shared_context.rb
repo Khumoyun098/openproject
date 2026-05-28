@@ -28,17 +28,28 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-class UserCustomField < CustomField
-  belongs_to :user_custom_field_section, class_name: "UserCustomFieldSection", foreign_key: :custom_field_section_id,
-                                         inverse_of: :custom_fields
+RSpec.shared_context "with seeded user custom fields" do
+  shared_let(:admin) { create(:admin) }
+  shared_let(:non_admin) { create(:user) }
 
-  acts_as_list column: :position_in_custom_field_section, scope: [:custom_field_section_id]
+  shared_let(:section_for_input_fields, refind: true) do
+    create(:user_custom_field_section, name: "Input fields")
+  end
+  shared_let(:section_for_select_fields, refind: true) do
+    create(:user_custom_field_section, name: "Select fields")
+  end
 
-  validates :custom_field_section_id, presence: true
-
-  scopes :visible
-
-  def type_name
-    :label_user_plural
+  shared_let(:boolean_user_custom_field, refind: true) do
+    create(:user_custom_field, name: "Boolean field", field_format: "bool",
+                               user_custom_field_section: section_for_input_fields)
+  end
+  shared_let(:string_user_custom_field, refind: true) do
+    create(:user_custom_field, name: "String field", field_format: "string",
+                               user_custom_field_section: section_for_input_fields)
+  end
+  shared_let(:list_user_custom_field, refind: true) do
+    create(:user_custom_field, name: "List field", field_format: "list",
+                               possible_values: ["Option 1", "Option 2", "Option 3"],
+                               user_custom_field_section: section_for_select_fields)
   end
 end

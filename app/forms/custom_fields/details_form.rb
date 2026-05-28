@@ -54,8 +54,8 @@ module CustomFields
           label: I18n.t("activerecord.attributes.project_custom_field.custom_field_section"),
           required: true
         ) do |list|
-          ProjectCustomFieldSection.find_each do |cs|
-            list.option(value: cs.id, label: cs.name)
+          section_class_for_model.all.each do |cs|
+            list.option(value: cs.id, label: cs.name.presence || I18n.t("settings.user_attributes.label_untitled_section"))
           end
         end
       end
@@ -217,7 +217,11 @@ module CustomFields
     end
 
     def show_section_field?
-      model.is_a?(ProjectCustomField)
+      model.is_a?(ProjectCustomField) || model.is_a?(UserCustomField)
+    end
+
+    def section_class_for_model
+      model.is_a?(UserCustomField) ? UserCustomFieldSection : ProjectCustomFieldSection
     end
 
     def show_default_bool_field?

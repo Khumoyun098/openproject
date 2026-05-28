@@ -28,17 +28,29 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-class UserCustomField < CustomField
-  belongs_to :user_custom_field_section, class_name: "UserCustomFieldSection", foreign_key: :custom_field_section_id,
-                                         inverse_of: :custom_fields
+module Settings
+  module UserCustomFields
+    class HeaderComponent < ApplicationComponent
+      include ApplicationHelper
+      include OpPrimer::ComponentHelpers
+      include OpTurbo::Streamable
+      include CustomFieldsHelper
 
-  acts_as_list column: :position_in_custom_field_section, scope: [:custom_field_section_id]
+      def initialize(allow_custom_field_creation:)
+        super
 
-  validates :custom_field_section_id, presence: true
+        @allow_custom_field_creation = allow_custom_field_creation
+      end
 
-  scopes :visible
+      def breadcrumbs_items
+        [{ href: admin_index_path, text: t("label_administration") },
+         { href: admin_settings_user_custom_fields_path, text: t("label_user_and_permission") },
+         t("settings.user_attributes.heading")]
+      end
 
-  def type_name
-    :label_user_plural
+      def allow_custom_field_creation?
+        @allow_custom_field_creation
+      end
+    end
   end
 end
