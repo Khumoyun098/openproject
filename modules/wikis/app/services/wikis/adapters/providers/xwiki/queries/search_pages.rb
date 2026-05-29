@@ -34,16 +34,33 @@ module Wikis
       module XWiki
         module Queries
           class SearchPages < BaseQuery
-            def call(input_data:, **)
-              # TODO: use real API endpoints once available
+            include Concerns::XWikiQuery
 
-              titles = [
-                "#{input_data.query} makes XWiki special",
-                "API documentation of #{input_data.query}",
-                "A brief introduction on configuring your own #{input_data.query}."
-              ]
+            MAXIMUM_RESULTS = 50
 
-              success(titles.map { Results::PageInfo.new(identifier: "1338", title: it, href: "#", provider:) })
+            def call(input_data:, auth_strategy:)
+              query = { q: "\"#{escape_quotes input_data.query}\"", number: MAXIMUM_RESULTS }
+
+              authenticated(auth_strategy) do |http|
+                handle_response(http.get(rest_url("wikis/query", query:))) do |json|
+                  success(
+                    json.fetch("searchResults")
+                        .uniq { |r| r.fetch("id") }
+                        .map do |r|
+                          result = page_info(identifier: r.fetch("id"), auth_strategy:)
+                          return result if result.failure?
+
+                          result.value!
+                        end
+                  )
+                end
+              end
+            end
+
+            private
+
+            def escape_quotes(string)
+              string.gsub("\\", "\\\\").gsub('"', '\"')
             end
           end
         end
