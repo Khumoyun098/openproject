@@ -29,37 +29,23 @@
 #++
 
 module Users
-  module Profile
-    class AttributesComponent < ApplicationComponent
-      include ApplicationHelper
-      include OpTurbo::Streamable
-      include OpPrimer::ComponentHelpers
-
-      def initialize(user:)
+  module Form
+    class CustomFieldSectionsComponent < ApplicationComponent
+      def initialize(form:)
         super()
-
-        @user = user
+        @form = form
       end
 
-      def render?
-        user_is_allowed_to_see_email || sections_with_fields.any?
-      end
-
-      def sections_with_fields
-        @sections_with_fields ||= begin
-          filled_cf_ids = @user
-            .visible_custom_field_values
-            .select { |cv| cv.value.present? }
-            .map(&:custom_field_id)
+      def sections
+        @sections ||= begin
+          visible_cf_ids = @form.object.visible_custom_field_values.map(&:custom_field_id)
 
           UserCustomFieldSection
-            .with_custom_fields(filled_cf_ids)
-            .map { |section| [section, section.custom_fields] }
+            .with_custom_fields(visible_cf_ids)
+            .map do |section|
+              Users::Form::CustomFieldSectionComponent.new(section:, fields: section.custom_fields, form: @form)
+            end
         end
-      end
-
-      def user_is_allowed_to_see_email
-        User.current == @user || User.current.allowed_globally?(:view_user_email)
       end
     end
   end

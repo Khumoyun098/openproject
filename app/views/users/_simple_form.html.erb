@@ -35,6 +35,6 @@ See COPYRIGHT and LICENSE files for more details.
     <%= render partial: "users/form/admin_flag", locals: { f: f } %>
   <% end %>
 
-  <%= render partial: "users/form/custom_fields", locals: { f: f } %>
+  <%= render Users::Form::CustomFieldSectionsComponent.new(form: f) %>
   <%= call_hook(:view_users_form, user: @user, form: f) %>
 </section>

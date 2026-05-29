@@ -29,6 +29,13 @@
 #++
 
 class UserCustomFieldSection < CustomFieldSection
+  scope :with_custom_fields, ->(ids) {
+    joins(:custom_fields)
+      .where(custom_fields: { id: ids })
+      .includes(:custom_fields)
+      .order("custom_field_sections.position", "custom_fields.position_in_custom_field_section")
+  }
+
   def untitled?
     name.blank?
   end

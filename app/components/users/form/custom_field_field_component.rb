@@ -29,37 +29,39 @@
 #++
 
 module Users
-  module Profile
-    class AttributesComponent < ApplicationComponent
+  module Form
+    class CustomFieldFieldComponent < ApplicationComponent
       include ApplicationHelper
-      include OpTurbo::Streamable
-      include OpPrimer::ComponentHelpers
 
-      def initialize(user:)
+      def initialize(custom_field:, form:)
         super()
-
-        @user = user
+        @custom_field = custom_field
+        @form = form
       end
 
-      def render?
-        user_is_allowed_to_see_email || sections_with_fields.any?
+      def field_options
+        {
+          custom_value: @form.object.custom_value_for(@custom_field),
+          custom_field: @custom_field
+        }
       end
 
-      def sections_with_fields
-        @sections_with_fields ||= begin
-          filled_cf_ids = @user
-            .visible_custom_field_values
-            .select { |cv| cv.value.present? }
-            .map(&:custom_field_id)
+      def css_classes
+        ["form--field", @custom_field.attribute_name, required_class].compact
+      end
 
-          UserCustomFieldSection
-            .with_custom_fields(filled_cf_ids)
-            .map { |section| [section, section.custom_fields] }
+      def container_class
+        case @custom_field.field_format
+        when "text" then "-xxwide"
+        when "date" then "-xslim"
+        else "-middle"
         end
       end
 
-      def user_is_allowed_to_see_email
-        User.current == @user || User.current.allowed_globally?(:view_user_email)
+      private
+
+      def required_class
+        "-required" if @custom_field.is_required? && !@custom_field.boolean?
       end
     end
   end

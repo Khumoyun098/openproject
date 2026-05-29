@@ -1,0 +1,7 @@
+<fieldset class="form--fieldset">
+  <legend class="form--fieldset-legend"><%= title %></legend>
+
+  <% @fields.each do |custom_field| %>
+    <%= render Users::Form::CustomFieldFieldComponent.new(custom_field:, form: @form) %>
+  <% end %>
+</fieldset>

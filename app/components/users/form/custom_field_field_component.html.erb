@@ -1,0 +1,5 @@
+<%= @form.fields_for_custom_fields :custom_field_values, @form.object, field_options do |cf_form| %>
+  <%= content_tag :div, class: css_classes do
+    cf_form.cf_form_field(container_class:)
+  end %>
+<% end %>
