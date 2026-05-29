@@ -38,7 +38,7 @@ module Backlogs
     def menu
       render(Backlogs::WorkPackageCardMenuComponent.new(
                project: @project,
-               work_package:,
+               work_package: work_package_with_backlog_neighbours,
                open_sprints_exist: open_sprints_exist?,
                other_buckets_exist: other_buckets_exist?,
                current_user:
@@ -130,7 +130,9 @@ module Backlogs
       end
     end
 
-    def work_package = displayed_work_packages.with_backlogs_neighbours.find(@work_package.id)
+    def work_package_with_backlog_neighbours
+      displayed_work_packages.with_backlogs_neighbours.find(@work_package.id)
+    end
 
     def open_sprints_exist?
       Sprint.for_project(@project).visible
