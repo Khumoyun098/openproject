@@ -29,37 +29,25 @@
 #++
 
 module Wikis
-  class LinkExistingWikiPageDialog < ApplicationComponent
-    include OpTurbo::Streamable
+  class SearchPagesController < ApplicationController
+    no_authorization_required! :show
 
-    attr_reader :linkable, :provider
+    def show
+      @provider = Provider.find(params.expect(:provider_id))
+      @query = params[:query]
 
-    SEARCH_RESULTS_FRAME_ID = "search-wiki-page-results"
+      @results = [
+        Adapters::Results::PageInfo.new(title: "Stormtrooper Basic Gear",
+                                        href: "#", provider: nil, identifier: "Stormtrooper_Basic_Gear"),
+        Adapters::Results::PageInfo.new(title: "How to fight a Jedi - FanFiction",
+                                        href: "#", provider: nil, identifier: "fight_jedi"),
+        Adapters::Results::PageInfo.new(title: "E-11 - A practical guide",
+                                        href: "#", provider: nil, identifier: "e11_guide"),
+        Adapters::Results::PageInfo.new(title: "Technical specification of Death Star beam weapon",
+                                        href: "#", provider: nil, identifier: "beam_spec")
+      ].sample(2)
 
-    def initialize(linkable:, provider:, **)
-      super(nil, **)
-
-      @linkable = linkable
-      @provider = provider
-    end
-
-    def id = "link-existing-wiki-page-dialog"
-
-    def form_id = "#{id}-form"
-
-    def form_options
-      {
-        id: form_id,
-        model: RelationPageLink.new(provider:, linkable:),
-        url: relation_wiki_page_links_path,
-        data: {
-          turbo_frame: WorkPackageWikisTabComponent::TURBO_FRAME_ID
-        }
-      }
-    end
-
-    def system_arguments
-      options
+      render layout: false
     end
   end
 end

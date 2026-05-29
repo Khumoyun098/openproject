@@ -72,4 +72,6 @@ Rails.application.routes.draw do
   resource :wiki_page_link_macro, controller: "wikis/page_link_macro", only: [] do
     get :load
   end
+
+  resource :search_wiki_pages, controller: "wikis/search_pages", only: %i[show]
 end

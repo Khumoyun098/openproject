@@ -29,37 +29,25 @@
 #++
 
 module Wikis
-  class LinkExistingWikiPageDialog < ApplicationComponent
-    include OpTurbo::Streamable
+  class PageSearchResults < ApplicationComponent
+    include OpPrimer::ComponentHelpers
 
-    attr_reader :linkable, :provider
+    alias_method :search_results, :model
 
-    SEARCH_RESULTS_FRAME_ID = "search-wiki-page-results"
-
-    def initialize(linkable:, provider:, **)
-      super(nil, **)
-
-      @linkable = linkable
-      @provider = provider
+    def build_search_results_tree(tree_view)
+      search_results.each do |page_info|
+        tree_view.with_leaf(**item_options(page_info))
+      end
     end
 
-    def id = "link-existing-wiki-page-dialog"
+    private
 
-    def form_id = "#{id}-form"
-
-    def form_options
+    def item_options(page_info)
       {
-        id: form_id,
-        model: RelationPageLink.new(provider:, linkable:),
-        url: relation_wiki_page_links_path,
-        data: {
-          turbo_frame: WorkPackageWikisTabComponent::TURBO_FRAME_ID
-        }
+        select_variant: :single,
+        label: page_info.title,
+        data: { page_identifier: page_info.identifier }
       }
-    end
-
-    def system_arguments
-      options
     end
   end
 end
