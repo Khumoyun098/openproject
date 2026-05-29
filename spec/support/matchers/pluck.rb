@@ -30,23 +30,48 @@
 
 # When you need to check an attribute for multiple records:
 #
-#   expect(WorkPackage.where(sprint:)).to have_attr(:position,
-#     wp1 => 1,
-#     wp2 => 2,
-#     wp3 => nil
+#   expect(WorkPackage.where(sprint:)).to pluck(:positions).eq(
+#     sprint1_wp2 => 1,
+#     sprint1_wp3 => 2,
+#     sprint1_wp4 => 3,
+#     sprint1_wp1 => 4,
+#     sprint1_wp5 => 6
 #   )
+#
+# Fails with:
+#
+#    582 => 1,
+#    583 => 2,
+#    584 => 3,
+#   -585 => 6,
+#   +585 => 5,
 #
 # Specify `identified_by` attribute to be used instead of `id` to differentiate
 # records in failurediff, it must be unique:
 #
-#   expect(WorkPackage.where(sprint:)).to have_attr(:position, identified_by: :subject,
-#     wp1 => 1,
-#     wp2 => 2
+#   expect(WorkPackage.where(sprint:)).to pluck(:positions, identified_by: :subject).eq(
+#     sprint1_wp2 => 1,
+#     sprint1_wp3 => 2,
+#     sprint1_wp4 => 3,
+#     sprint1_wp1 => 4,
+#     sprint1_wp5 => 6
 #   )
-RSpec::Matchers.define :have_attr do |attribute, identified_by: :id, **expected|
-  match do |actual|
-    @actual   = actual.pluck(identified_by, attribute).to_h
+#
+# Fails with:
+#
+#    "Sprint 1 WorkPackage 2" => 1,
+#    "Sprint 1 WorkPackage 3" => 2,
+#    "Sprint 1 WorkPackage 4" => 3,
+#   -"Sprint 1 WorkPackage 5" => 6,
+#   +"Sprint 1 WorkPackage 5" => 5,
+
+RSpec::Matchers.define :pluck do |attribute, identified_by: :id|
+  chain :eq do |expected|
     @expected = expected.transform_keys { it.public_send(identified_by) }
+  end
+
+  match do |actual|
+    @actual = actual.pluck(identified_by, attribute).to_h
     @actual == @expected
   end
 

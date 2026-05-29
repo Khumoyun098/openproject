@@ -79,7 +79,7 @@ RSpec.describe WorkPackage, "positions" do # rubocop:disable RSpec/SpecFilePathF
   end
 
   def have_positions(**) # rubocop:disable Naming/PredicatePrefix
-    have_attr(:position, identified_by: :subject, **)
+    pluck(:position, identified_by: :subject).eq(**)
   end
 
   context "when creating a work_package in a sprint" do
