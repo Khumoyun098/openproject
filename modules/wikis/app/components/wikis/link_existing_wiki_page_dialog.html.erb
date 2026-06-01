@@ -34,7 +34,8 @@ See COPYRIGHT and LICENSE files for more details.
       title: t(".title"),
       size: :large,
       data: {
-        controller: "wikis--add-existing-page"
+        controller: "wikis--add-existing-page",
+        "wikis--add-existing-page-provider-id-value": provider.id
       },
       **system_arguments
     )
@@ -66,7 +67,7 @@ See COPYRIGHT and LICENSE files for more details.
           helpers.turbo_frame_tag SEARCH_RESULTS_FRAME_ID,
                                   refresh: :morph,
                                   data: { wikis__add_existing_page_target: "searchResultsFrame" } do
-            render(Wikis::PageSearchResults.new([]))
+            render(Wikis::PageSearchResults.new(Dry::Monads::Success([])))
           end
         %>
 

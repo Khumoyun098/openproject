@@ -32,18 +32,33 @@ import { FrameElement } from '@hotwired/turbo';
 import { Controller } from '@hotwired/stimulus';
 import { debounce, DebouncedFunc } from 'lodash';
 
+import { PathHelperService } from 'core-app/core/path-helper/path-helper.service';
+
 export default class AddExistingPageController extends Controller {
   static targets = [
     'searchInput',
-    'searchResultsFrame'
+    'searchResultsFrame',
+    'identifierInput',
   ];
+
+  static values = {
+    providerId: String,
+  };
 
   declare readonly searchInputTarget:HTMLInputElement;
   declare readonly searchResultsFrameTarget:FrameElement;
+  declare readonly identifierInputTarget:HTMLInputElement;
+
+  declare readonly providerIdValue:string;
 
   private debouncedSearch:DebouncedFunc<(event:InputEvent) => void>;
+  private pathHelper:PathHelperService;
 
   connect() {
+    void window.OpenProject.getPluginContext().then((context) => {
+      this.pathHelper = context.services.pathHelperService;
+    });
+
     this.debouncedSearch = debounce((ev:InputEvent) => {
       const input = ev.target;
       if (!this.isInputElement(input)) return;
@@ -63,16 +78,33 @@ export default class AddExistingPageController extends Controller {
     this.debouncedSearch(event);
   }
 
+  selectPage(event:CustomEvent<{ node:Node, previousCheckedValue:string }[]>):void {
+    const selectedPage = event.detail[0]?.node;
+    // Attention: the attribute `checkedValue` doesn't work, as it is always true and does not toggle
+    const isChecked = event.detail[0]?.previousCheckedValue === 'false';
+    if (!this.isTreeViewElement(selectedPage)) return;
+
+    if (isChecked) {
+      this.identifierInputTarget.value = selectedPage.dataset.identifier ?? '';
+    } else {
+      this.identifierInputTarget.value = '';
+    }
+  }
+
   private isInputElement(target:EventTarget|null):target is HTMLInputElement {
     return target !== null && target instanceof HTMLInputElement;
   }
 
-  private searchWikiPages(query:string) {
-    const url = 'https://openproject.internal/search_wiki_pages';
-    const params = new URLSearchParams();
-    params.set('query', query);
-    params.set('provider_id', '1');
+  private isTreeViewElement(target:Node|null):target is HTMLDivElement {
+    return target !== null &&
+      target instanceof HTMLDivElement &&
+      target.getAttribute('role') === 'treeitem';
+  }
 
-    this.searchResultsFrameTarget.src = `${url}?${params}`;
+  private searchWikiPages(query:string) {
+    void window.OpenProject.getPluginContext().then((context) => {
+      const pathHelper = context.services.pathHelperService;
+      this.searchResultsFrameTarget.src = pathHelper.searchWikiPages(query, this.providerIdValue);
+    });
   }
 }

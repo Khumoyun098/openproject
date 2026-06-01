@@ -33,8 +33,8 @@ module Wikis
     no_authorization_required! :show
 
     def show
-      @provider = Provider.find(params.expect(:provider_id))
-      @query = params[:query]
+      provider = Provider.find(params.expect(:provider_id))
+      query = params[:query]
 
       @results = [
         Adapters::Results::PageInfo.new(title: "Stormtrooper Basic Gear",
@@ -47,7 +47,19 @@ module Wikis
                                         href: "#", provider: nil, identifier: "beam_spec")
       ].sample(2)
 
+      @search_result = search_pages(query, provider)
+
       render layout: false
+    end
+
+    private
+
+    def search_pages(query, provider)
+      Adapters::Input::SearchPages.build(query:).bind do |input_data|
+        provider.auth_strategy_for(current_user).bind do |auth_strategy|
+          provider.resolve("queries.search_pages").call(input_data:, auth_strategy:)
+        end
+      end
     end
   end
 end

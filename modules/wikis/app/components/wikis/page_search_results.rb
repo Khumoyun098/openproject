@@ -32,10 +32,17 @@ module Wikis
   class PageSearchResults < ApplicationComponent
     include OpPrimer::ComponentHelpers
 
-    alias_method :search_results, :model
+    alias_method :search_result, :model
+
+    # attr_reader :form
+    #
+    # def initialize(model = nil, form:, **)
+    #   @form = form
+    #   super(model, **)
+    # end
 
     def build_search_results_tree(tree_view)
-      search_results.each do |page_info|
+      search_result.value!.each do |page_info|
         tree_view.with_leaf(**item_options(page_info))
       end
     end
@@ -46,7 +53,7 @@ module Wikis
       {
         select_variant: :single,
         label: page_info.title,
-        data: { page_identifier: page_info.identifier }
+        data: { identifier: page_info.identifier }
       }
     end
   end
