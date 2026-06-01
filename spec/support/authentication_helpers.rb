@@ -68,7 +68,12 @@ module AuthenticationHelpers
       end
 
       click_button I18n.t(:button_login), type: "submit"
+    end
+
+    if using_cuprite?
       wait_for_network_idle
+    else
+      expect(page).to have_no_test_selector("user-login--form", wait: 10)
     end
   end
 
