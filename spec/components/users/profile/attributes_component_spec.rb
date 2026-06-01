@@ -138,12 +138,18 @@ RSpec.describe Users::Profile::AttributesComponent, type: :component do
     end
 
     context "with multiple fields in one section" do
-      let(:field_1) { create(:user_custom_field, :string, name: "Field 1", user_custom_field_section: section, position_in_custom_field_section: 1) }
-      let(:field_2) { create(:user_custom_field, :string, name: "Field 2", user_custom_field_section: section, position_in_custom_field_section: 2) }
+      let(:first_field) do
+        create(:user_custom_field, :string, name: "Field 1", user_custom_field_section: section,
+                                            position_in_custom_field_section: 1)
+      end
+      let(:second_field) do
+        create(:user_custom_field, :string, name: "Field 2", user_custom_field_section: section,
+                                            position_in_custom_field_section: 2)
+      end
       let(:user) do
         build_stubbed(:user, custom_values: [
-                        build(:custom_value, custom_field: field_1, value: "First value"),
-                        build(:custom_value, custom_field: field_2, value: "Second value")
+                        build(:custom_value, custom_field: first_field, value: "First value"),
+                        build(:custom_value, custom_field: second_field, value: "Second value")
                       ])
       end
 
@@ -155,8 +161,14 @@ RSpec.describe Users::Profile::AttributesComponent, type: :component do
     end
 
     context "with multi-select and formattable fields" do
-      let(:list_field) { create(:user_custom_field, :multi_list, name: "Ze list",   user_custom_field_section: section, position_in_custom_field_section: 2) }
-      let(:text_field) { create(:user_custom_field, :text,       name: "A portrait", user_custom_field_section: section, position_in_custom_field_section: 1) }
+      let(:list_field) do
+        create(:user_custom_field, :multi_list, name: "Ze list", user_custom_field_section: section,
+                                                position_in_custom_field_section: 2)
+      end
+      let(:text_field) do
+        create(:user_custom_field, :text,       name: "A portrait", user_custom_field_section: section,
+                                                position_in_custom_field_section: 1)
+      end
       let(:user) do
         build_stubbed(:user, custom_values: [
                         build(:custom_value, custom_field: list_field, value: list_field.possible_values[0]),

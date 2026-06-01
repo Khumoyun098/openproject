@@ -34,9 +34,15 @@ RSpec.describe UserCustomFieldSection do
   describe ".with_custom_fields" do
     let!(:section_a) { create(:user_custom_field_section, name: "Section A", position: 1) }
     let!(:section_b) { create(:user_custom_field_section, name: "Section B", position: 2) }
-    let!(:field_a1) { create(:user_custom_field, name: "A1", user_custom_field_section: section_a, position_in_custom_field_section: 1) }
-    let!(:field_a2) { create(:user_custom_field, name: "A2", user_custom_field_section: section_a, position_in_custom_field_section: 2) }
-    let!(:field_b1) { create(:user_custom_field, name: "B1", user_custom_field_section: section_b, position_in_custom_field_section: 1) }
+    let!(:field_a1) do
+      create(:user_custom_field, name: "A1", user_custom_field_section: section_a, position_in_custom_field_section: 1)
+    end
+    let!(:field_a2) do
+      create(:user_custom_field, name: "A2", user_custom_field_section: section_a, position_in_custom_field_section: 2)
+    end
+    let!(:field_b1) do
+      create(:user_custom_field, name: "B1", user_custom_field_section: section_b, position_in_custom_field_section: 1)
+    end
 
     it "returns only sections that have at least one matching field" do
       result = described_class.with_custom_fields([field_a1.id])

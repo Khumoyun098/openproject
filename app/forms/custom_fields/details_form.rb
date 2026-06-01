@@ -54,7 +54,7 @@ module CustomFields
           label: I18n.t("activerecord.attributes.project_custom_field.custom_field_section"),
           required: true
         ) do |list|
-          section_class_for_model.all.each do |cs|
+          section_class_for_model.all.each do |cs| # rubocop:disable Rails/FindEach -- ordered by default_scope; find_each would override it
             list.option(value: cs.id, label: cs.name.presence || I18n.t("settings.user_attributes.label_untitled_section"))
           end
         end

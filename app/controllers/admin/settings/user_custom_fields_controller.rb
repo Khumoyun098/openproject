@@ -71,7 +71,7 @@ module Admin::Settings
 
     def move
       result = CustomFields::UpdateService.new(user: current_user, model: @custom_field).call(
-        move_to: params[:move_to]&.to_sym
+        move_to: params.expect(:move_to)&.to_sym
       )
 
       if result.success?
@@ -131,7 +131,7 @@ module Admin::Settings
     end
 
     def find_custom_field
-      @custom_field = UserCustomField.find(params[:id])
+      @custom_field = UserCustomField.find(params.expect(:id))
     end
 
     def drop_success_streams(call)

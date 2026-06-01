@@ -169,15 +169,15 @@ RSpec.describe Users::HoverCardComponent, type: :component do
     let(:section) { create(:user_custom_field_section) }
     let!(:visible_cf) do
       create(:user_custom_field, :string, name: "Job title",
-             user_custom_field_section: section, visible_on_user_card: true)
+                                          user_custom_field_section: section, visible_on_user_card: true)
     end
     let!(:hidden_cf) do
       create(:user_custom_field, :string, name: "Hidden field",
-             user_custom_field_section: section, visible_on_user_card: false)
+                                          user_custom_field_section: section, visible_on_user_card: false)
     end
     let!(:admin_only_cf) do
       create(:user_custom_field, :string, name: "Secret field",
-             user_custom_field_section: section, visible_on_user_card: true, admin_only: true)
+                                          user_custom_field_section: section, visible_on_user_card: true, admin_only: true)
     end
     let(:user) do
       create(:user,

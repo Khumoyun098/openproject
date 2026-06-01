@@ -72,8 +72,7 @@ module Admin::Settings
       if call.success?
         update_header_via_turbo_stream(allow_custom_field_creation: allow_custom_field_creation?)
         update_sections_via_turbo_stream(user_custom_field_sections: UserCustomFieldSection.all)
-      else
-        # TODO: show error message
+        # TODO: show error message on failure
       end
 
       respond_with_turbo_streams
@@ -81,13 +80,12 @@ module Admin::Settings
 
     def move
       call = ::UserCustomFieldSections::UpdateService.new(user: current_user, model: @user_custom_field_section).call(
-        move_to: params[:move_to]&.to_sym
+        move_to: params.expect(:move_to)&.to_sym
       )
 
       if call.success?
         update_sections_via_turbo_stream(user_custom_field_sections: UserCustomFieldSection.all)
-      else
-        # TODO: show error message
+        # TODO: show error message on failure
       end
 
       respond_with_turbo_streams
@@ -101,8 +99,7 @@ module Admin::Settings
       if call.success?
         update_header_via_turbo_stream(allow_custom_field_creation: allow_custom_field_creation?)
         update_sections_via_turbo_stream(user_custom_field_sections: UserCustomFieldSection.all)
-      else
-        # TODO: show error message
+        # TODO: show error message on failure
       end
 
       respond_with_turbo_streams
@@ -115,7 +112,7 @@ module Admin::Settings
     private
 
     def set_user_custom_field_section
-      @user_custom_field_section = UserCustomFieldSection.find(params[:id])
+      @user_custom_field_section = UserCustomFieldSection.find(params.expect(:id))
     end
 
     def allow_custom_field_creation?

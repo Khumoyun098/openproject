@@ -84,7 +84,7 @@ module UserCustomFields
     def update_section(new_section_id)
       current_section = UserCustomFieldSection.find(new_section_id)
       @user_custom_field.remove_from_list
-      @user_custom_field.update(user_custom_field_section: current_section)
+      @user_custom_field.update!(user_custom_field_section: current_section)
       current_section
     end
 

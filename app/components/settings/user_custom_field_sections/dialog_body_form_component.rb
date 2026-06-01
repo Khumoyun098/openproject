@@ -51,7 +51,11 @@ module Settings
         {
           model: @user_custom_field_section,
           method: @user_custom_field_section.persisted? ? :put : :post,
-          url: @user_custom_field_section.persisted? ? admin_settings_user_custom_field_section_path(@user_custom_field_section) : admin_settings_user_custom_field_sections_path,
+          url: if @user_custom_field_section.persisted?
+                 admin_settings_user_custom_field_section_path(@user_custom_field_section)
+               else
+                 admin_settings_user_custom_field_sections_path
+               end,
           data: { turbo_stream: true }
         }
       end
