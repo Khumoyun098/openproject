@@ -756,24 +756,24 @@ RSpec.describe Backlogs::WorkPackagesController do
         expect(response).to have_turbo_stream action: "dialog"
       end
 
-      it "includes the existing sprints in the target_id" do
+      it "includes the existing sprints as list_id options" do
         subject
 
         displayed_sprints.each do |sprint|
-          expect(response.body).to include("sprint:#{sprint.id}")
+          expect(response.body).to include(%(value="#{sprint.id}"))
         end
       end
 
-      it "does not include the current sprints from the target_id" do
+      it "does not include the current sprint as a list_id option" do
         subject
 
-        expect(response.body).not_to include("sprint:#{sprint.id}")
+        expect(response.body).not_to include(%(value="#{sprint.id}"))
       end
 
       it "does not include the other sprint" do
         subject
 
-        expect(response.body).not_to include("sprint:#{other_sprint.id}")
+        expect(response.body).not_to include(%(value="#{other_sprint.id}"))
       end
     end
 
@@ -795,18 +795,18 @@ RSpec.describe Backlogs::WorkPackagesController do
         expect(response.body).not_to include("sprints")
       end
 
-      it "includes the existing sprints in the target_id" do
+      it "includes the existing sprints as list_id options" do
         subject
 
         displayed_sprints.each do |sprint|
-          expect(response.body).to include("sprint:#{sprint.id}")
+          expect(response.body).to include(%(value="#{sprint.id}"))
         end
       end
 
       it "does not include the other sprint" do
         subject
 
-        expect(response.body).not_to include("sprint:#{other_sprint.id}")
+        expect(response.body).not_to include(%(value="#{other_sprint.id}"))
       end
     end
 
@@ -826,14 +826,14 @@ RSpec.describe Backlogs::WorkPackagesController do
         subject
 
         displayed_sprints.each do |sprint|
-          expect(response.body).to include("sprint:#{sprint.id}")
+          expect(response.body).to include(%(value="#{sprint.id}"))
         end
       end
 
       it "does not include sprints from other projects" do
         subject
 
-        expect(response.body).not_to include("sprint:#{other_sprint.id}")
+        expect(response.body).not_to include(%(value="#{other_sprint.id}"))
       end
     end
 

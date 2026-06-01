@@ -125,5 +125,19 @@ RSpec.describe OpenProject::Common::WorkPackageCardComponent, type: :component d
       expect(rendered).to have_element "include-fragment", src: "/slot-menu"
       expect(rendered).to have_no_element "include-fragment", src: menu_src
     end
+
+    it "passes system arguments to the root card element" do
+      rendered = render_inline(
+        described_class.new(
+          work_package:,
+          data: { controller: "custom-card" },
+          draggable: true
+        )
+      )
+
+      expect(rendered).to have_css(
+        ".op-work-package-card[data-controller='custom-card'][draggable='true']"
+      )
+    end
   end
 end

@@ -89,7 +89,8 @@ RSpec.describe "Inbox column in sprint planning view", :js do
         planning_page.expect_inbox_blankslate
         planning_page.expect_backlog_blankslate
         planning_page.expect_backlog_blankslate_description(
-          "To start planning your sprint, create one here or go to the project settings to receive sprints from a different project."
+          "To start planning your sprint, create one here or go to the project settings " \
+          "to receive sprints from a different project."
         )
         planning_page.expect_backlog_settings_link
         planning_page.expect_new_sprint_button
@@ -274,9 +275,9 @@ RSpec.describe "Inbox column in sprint planning view", :js do
 
         within("#move-to-sprint-dialog") do
           # Expect to have all sprints listed
-          expect(page).to have_select("target_id", with_options: ["Sprint 1", "Sprint 2"])
+          expect(page).to have_select("list_id", with_options: ["Sprint 1", "Sprint 2"])
 
-          select sprint.name, from: "target_id"
+          select sprint.name, from: "list_id"
           click_button "Move"
         end
 
@@ -290,8 +291,8 @@ RSpec.describe "Inbox column in sprint planning view", :js do
           planning_page.click_in_inbox_move_menu(inbox_wp1, "Move to sprint", wait: false)
 
           within("#move-to-sprint-dialog") do
-            expect(page).to have_select("target_id", with_options: ["Sprint 1", "Sprint 2"])
-            select sprint.name, from: "target_id"
+            expect(page).to have_select("list_id", with_options: ["Sprint 1", "Sprint 2"])
+            select sprint.name, from: "list_id"
 
             # Before saving the selection, simulate that another user completed the sprint
             sprint.completed!
@@ -311,7 +312,7 @@ RSpec.describe "Inbox column in sprint planning view", :js do
       end
     end
 
-    describe "moving backlog items to a sprint via drag-and-drop" do
+    describe "moving backlog items to a sprint via drag-and-drop", :selenium do
       it "moves multiple items into the sprint one by one" do
         planning_page.drag_inbox_item_to_sprint(inbox_wp1, sprint)
         planning_page.expect_no_inbox_item(inbox_wp1)
@@ -328,7 +329,13 @@ RSpec.describe "Inbox column in sprint planning view", :js do
         planning_page.expect_story_in_sprint(inbox_wp3, sprint)
       end
 
-      context "with real authentication and a private project" do
+      context "with real authentication and a private project",
+              with_settings: {
+                "plugin_openproject_two_factor_authentication" => {
+                  "active_strategies" => [],
+                  "disabled" => true
+                }
+              } do
         let!(:project) do
           create(:private_project,
                  types: [type],
@@ -399,7 +406,7 @@ RSpec.describe "Inbox column in sprint planning view", :js do
       end
     end
 
-    describe "moving sprint items back to the inbox via drag-and-drop" do
+    describe "moving sprint items back to the inbox via drag-and-drop", :selenium do
       let!(:sprint_wp1) { create(:work_package, project:, sprint:) }
       let!(:sprint_wp2) { create(:work_package, project:, sprint:) }
 
@@ -454,13 +461,13 @@ RSpec.describe "Inbox column in sprint planning view", :js do
       planning_page.visit!
     end
 
-    it "retains the expanded inbox across all update actions", :aggregate_failures do
+    it "retains the expanded inbox across all update actions", :aggregate_failures, :selenium do
       # Initial load shows pagination
       planning_page.expect_inbox_show_more
 
       # Expand inbox — URL advances to ?all=1
       planning_page.click_inbox_show_more
-      expect(page.current_url).to include("all=1")
+      expect(page).to have_current_path(/all=1/)
       planning_page.expect_no_inbox_show_more
 
       # Drag an inbox item to the sprint
@@ -478,7 +485,7 @@ RSpec.describe "Inbox column in sprint planning view", :js do
       # Move an inbox item to the sprint via the dialog
       planning_page.click_in_inbox_move_menu(inbox_items.last, "Move to sprint", wait: false)
       within("#move-to-sprint-dialog") do
-        select sprint.name, from: "target_id"
+        select sprint.name, from: "list_id"
         click_button "Move"
       end
       planning_page.expect_no_inbox_show_more

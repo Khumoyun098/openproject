@@ -30,7 +30,7 @@ See COPYRIGHT and LICENSE files for more details.
 <%= grid_layout(
       "op-work-package-card",
       tag: :article,
-      classes: layout_classes
+      **card_arguments
     ) do |grid| %>
   <% if show_drag_handle %>
     <% grid.with_area(:drag_handle, classes: "hide-when-print") do %>
@@ -67,17 +67,19 @@ See COPYRIGHT and LICENSE files for more details.
       <% end %>
     <% end %>
 
-    <% if menu? %>
-      <%= menu %>
-    <% else %>
-      <%= render(
-            OpenProject::Common::WorkPackageCardComponent::Menu.new(
-              work_package:,
-              src: menu_src,
-              button_aria_label: t(".menu.label_actions")
-            )
-          ) %>
-    <% end %>
+    <div class="hidden-for-drag-preview">
+      <% if menu? %>
+        <%= menu %>
+      <% else %>
+        <%= render(
+              OpenProject::Common::WorkPackageCardComponent::Menu.new(
+                work_package:,
+                src: menu_src,
+                button_aria_label: t(".menu.label_actions")
+              )
+            ) %>
+      <% end %>
+    </div>
   <% end %>
 
   <% grid.with_area(:subject) do %>

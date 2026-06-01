@@ -42,6 +42,10 @@ en:
         Drag on editor field to inline image or reference attachment. Closed editor fields will be opened while you keep dragging.
       quarantined_hint: "The file is quarantined, as a virus was found. It is not available for download."
 
+    sortable_lists:
+      drag_handle:
+        instructions: "Press Space to pick up this item. Use Up and Down arrow keys to choose a position. Press Space again to drop. Press Escape to cancel."
+
     autocomplete_ng_select:
       add_tag: "Add item"
       clear_all: "Clear all"

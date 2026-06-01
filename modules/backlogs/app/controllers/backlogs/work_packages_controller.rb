@@ -66,7 +66,7 @@ module Backlogs
       source = @work_package.sprint
 
       call = Stories::UpdateService.new(user: current_user, story: @work_package)
-                                   .call(**move_params.to_h.symbolize_keys)
+                                   .call(**move_service_params)
 
       if call.success?
         move_work_package_to_target_component_via_turbo_stream(source:, target: call.result.sprint)
@@ -123,7 +123,38 @@ module Backlogs
     end
 
     def move_params
-      params.permit(:position, :prev_id, :target_id, :direction)
+      params.permit(:position, :prev_id, :prev_item_id, :target_id, :direction, :list_type, :list_id)
+    end
+
+    def move_service_params
+      return move_params.to_h.symbolize_keys unless sortable_move?
+
+      { target_id: target_id_from_sortable_list }.merge(sortable_position_params)
+    end
+
+    def sortable_move?
+      move_params[:list_type].present?
+    end
+
+    def target_id_from_sortable_list
+      case move_params[:list_type]
+      when "inbox"
+        "inbox"
+      when "sprint", "backlog_bucket"
+        "#{move_params[:list_type]}:#{move_params[:list_id]}"
+      else
+        move_params[:list_type]
+      end
+    end
+
+    def sortable_position_params
+      if move_params.key?(:prev_item_id)
+        move_params[:prev_item_id].present? ? { prev_id: move_params[:prev_item_id] } : { position: 1 }
+      elsif move_params.key?(:position)
+        { position: move_params[:position] }
+      else
+        {}
+      end
     end
 
     def displayed_work_packages

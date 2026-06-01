@@ -30,11 +30,15 @@
 
 module Backlogs
   class WorkPackageCardListItemComponent < OpenProject::Common::BorderBoxListComponent::WorkPackageItem
-    private
-
-    def build_card
-      WorkPackageCardComponent.new(work_package:, menu_src:)
+    def card
+      @card ||= WorkPackageCardComponent.new(
+        work_package:,
+        menu_src:,
+        **card_arguments
+      )
     end
+
+    private
 
     def draggable?
       current_user.allowed_in_project?(:manage_sprint_items, project)
@@ -48,7 +52,7 @@ module Backlogs
       url_helpers.work_package_path(work_package)
     end
 
-    def drop_url
+    def move_url
       url_helpers.move_project_backlogs_work_package_path(project, work_package, params)
     end
 
@@ -56,10 +60,16 @@ module Backlogs
       url_helpers.menu_project_backlogs_work_package_path(project, work_package, params)
     end
 
-    # `story` data attrs match the live Stimulus controller and Dragula
-    # drag-type; renaming requires coordinated JS changes (separate PR).
-    def row_data
-      super.merge(
+    def card_arguments
+      {
+        classes: "op-backlogs-story",
+        tabindex: (0 if draggable?),
+        data: card_data
+      }
+    end
+
+    def card_data
+      data = {
         story: true,
         controller: "backlogs--story",
         backlogs__story_id_value: work_package.id,
@@ -67,14 +77,32 @@ module Backlogs
         backlogs__story_split_url_value: split_url,
         backlogs__story_full_url_value: full_url,
         backlogs__story_selected_class: "Box-row--blue"
-      )
+      }
+
+      return data unless draggable?
+
+      data.merge(sortable_lists__item_target: "preview handle")
     end
 
-    def draggable_data
+    public
+
+    def row_args
+      super.tap do |arguments|
+        next unless draggable?
+
+        arguments[:draggable] = true
+        arguments.delete(:tabindex)
+      end
+    end
+
+    def row_data
+      return {} unless draggable?
+
       {
-        draggable_id: work_package.id,
-        draggable_type: "story",
-        drop_url:
+        controller: "sortable-lists--item",
+        sortable_lists__item_id_value: work_package.id,
+        sortable_lists__item_type_value: "work_package",
+        sortable_lists__item_move_url_value: move_url
       }
     end
   end

@@ -116,11 +116,11 @@ module Backlogs
 
     def drag_and_drop_data
       {
-        generic_drag_and_drop_target: "container",
-        target_container_accessor: ":scope > ul",
-        target_id: drag_and_drop.fetch(:target_id),
-        target_allowed_drag_type: drag_and_drop.fetch(:allowed_drag_type)
-      }
+        sortable_lists_target: "list",
+        sortable_lists_list_type: drag_and_drop.fetch(:list_type)
+      }.tap do |data|
+        data[:sortable_lists_list_id] = drag_and_drop[:list_id] if drag_and_drop[:list_id].present?
+      end
     end
 
     def default_count_label(count)
