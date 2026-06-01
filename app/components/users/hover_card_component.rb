@@ -31,6 +31,8 @@
 class Users::HoverCardComponent < ApplicationComponent
   include OpPrimer::ComponentHelpers
 
+  MULTI_VALUE_DISPLAY_LIMIT = 3
+
   def initialize(id:)
     super
 
@@ -60,7 +62,27 @@ class Users::HoverCardComponent < ApplicationComponent
     build_summary(group_links, cutoff_index)
   end
 
+  def card_custom_field_values
+    @user.custom_values
+         .eager_load(:custom_field)
+         .joins("INNER JOIN custom_field_sections ON custom_field_sections.id = custom_fields.custom_field_section_id")
+         .where(custom_fields: { visible_on_user_card: true })
+         .where.not(value: [nil, ""])
+         .then { |scope| User.current.active_admin? ? scope : scope.where(custom_fields: { admin_only: false }) }
+         .order("custom_field_sections.position", "custom_fields.position_in_custom_field_section")
+  end
+
   private
+
+  def format_multi_values(values)
+    formatted = values.map(&:formatted_value)
+    visible = safe_join(formatted.first(MULTI_VALUE_DISPLAY_LIMIT), ", ")
+    remaining = formatted.size - MULTI_VALUE_DISPLAY_LIMIT
+
+    return visible if remaining <= 0
+
+    safe_join([visible, t("custom_fields.multi_value_more", count: remaining)], " ")
+  end
 
   def linked_group_names(groups)
     groups.map { |group| link_to(h(group.name), show_group_path(group)) }

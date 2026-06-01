@@ -199,6 +199,14 @@ module CustomFields
         )
       end
 
+      if show_on_user_card_field?
+        details_form.check_box(
+          name: :visible_on_user_card,
+          label: label(:visible_on_user_card),
+          caption: instructions(:visible_on_user_card)
+        )
+      end
+
       details_form.submit(name: :submit, label: I18n.t(:button_save), scheme: :default)
     end
 
@@ -286,6 +294,10 @@ module CustomFields
     end
 
     def show_editable_field?
+      model.is_a?(UserCustomField)
+    end
+
+    def show_on_user_card_field?
       model.is_a?(UserCustomField)
     end
 

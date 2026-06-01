@@ -164,4 +164,84 @@ RSpec.describe Users::HoverCardComponent, type: :component do
       end
     end
   end
+
+  context "when displaying custom fields" do
+    let(:section) { create(:user_custom_field_section) }
+    let!(:visible_cf) do
+      create(:user_custom_field, :string, name: "Job title",
+             user_custom_field_section: section, visible_on_user_card: true)
+    end
+    let!(:hidden_cf) do
+      create(:user_custom_field, :string, name: "Hidden field",
+             user_custom_field_section: section, visible_on_user_card: false)
+    end
+    let!(:admin_only_cf) do
+      create(:user_custom_field, :string, name: "Secret field",
+             user_custom_field_section: section, visible_on_user_card: true, admin_only: true)
+    end
+    let(:user) do
+      create(:user,
+             member_with_permissions: { project => [:view_project] },
+             custom_values: [
+               build(:custom_value, custom_field: visible_cf, value: "Developer"),
+               build(:custom_value, custom_field: hidden_cf, value: "Should not appear"),
+               build(:custom_value, custom_field: admin_only_cf, value: "Top secret")
+             ])
+    end
+
+    it "shows fields flagged as visible_on_user_card" do
+      expect(page).to have_test_selector("user-hover-card-custom-field", text: "Developer")
+    end
+
+    it "does not show fields with visible_on_user_card: false" do
+      expect(page).to have_no_text("Should not appear")
+    end
+
+    it "does not show admin_only fields to non-admins" do
+      expect(page).to have_no_text("Top secret")
+    end
+
+    context "when current user is admin" do
+      let(:current_user) { build(:admin) }
+
+      it "shows admin_only fields flagged as visible_on_user_card" do
+        expect(page).to have_test_selector("user-hover-card-custom-field", text: "Top secret")
+      end
+    end
+
+    context "with a multi-value field exceeding the display limit" do
+      let!(:multi_cf) do
+        create(:user_custom_field, :multi_list,
+               name: "Skills",
+               user_custom_field_section: section,
+               visible_on_user_card: true,
+               possible_values: %w[Ruby Rails React Vue Angular])
+      end
+      let(:user) do
+        create(:user,
+               member_with_permissions: { project => [:view_project] },
+               custom_values: multi_cf.possible_values.map { |opt| build(:custom_value, custom_field: multi_cf, value: opt) })
+      end
+
+      it "shows the first 3 values" do
+        expect(page).to have_test_selector("user-hover-card-custom-field", text: "Ruby, Rails, React")
+      end
+
+      it "appends the ellipsis wording for the remaining values" do
+        expect(page).to have_test_selector("user-hover-card-custom-field", text: "and 2 more")
+      end
+    end
+
+    context "when the value is blank" do
+      let(:user) do
+        create(:user,
+               member_with_permissions: { project => [:view_project] },
+               custom_values: [build(:custom_value, custom_field: visible_cf, value: "")])
+      end
+
+      it "does not render the field" do
+        expect(page).to have_no_test_selector("user-hover-card-custom-field")
+      end
+    end
+  end
 end

@@ -750,6 +750,11 @@ en:
         project: "0 means no restriction"
       has_comment:
         project: "Allows the user to add a comment related to the project attribute when selecting the value in the project overview."
+      visible_on_user_card:
+        all: "When checked, this field's value is shown in the user information card when hovering over a user across the application."
+
+    multi_value_more:
+      other: "and %{count} more"
 
     tab:
       no_results_title_text: There are currently no custom fields.
@@ -1848,6 +1853,7 @@ en:
         possible_values: "Possible values"
         regexp: "Regular expression"
         searchable: "Searchable"
+        visible_on_user_card: "Show on user card"
         admin_only: "Admin-only"
         has_comment: "Add a comment text field"
       custom_value:
