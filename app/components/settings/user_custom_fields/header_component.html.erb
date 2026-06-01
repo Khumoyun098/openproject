@@ -42,7 +42,11 @@
                 href: new_admin_settings_user_custom_field_path(field_format: format.name),
                 content_arguments: { data: { turbo: "false",
                                              test_selector: "new-user-custom-field-button" } }
-              )
+              ) do |item|
+                unless format.enterprise_feature_allowed?
+                  item.with_trailing_visual_icon(icon: :"op-enterprise-addons", classes: "upsell-colored")
+                end
+              end
             end
           end
         end

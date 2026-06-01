@@ -28,50 +28,17 @@
 # See COPYRIGHT and LICENSE files for more details.
 #++
 
-module Pages
-  module Admin
-    module Settings
-      module UserCustomFields
-        class Index < ::Pages::Page
-          def path
-            "/admin/settings/user_custom_fields"
-          end
-
-          def visit_page(customizable_name)
-            fail "Only User type is expected" unless customizable_name == "Users"
-
-            visit!
-          end
-
-          def expect_add_user_attribute_submenu(close: true)
-            within_add_menu(close:) do
-              expect(page).to have_test_selector("add-user-custom-field-attribute")
-            end
-          end
-
-          def expect_no_add_user_attribute_submenu(close: true)
-            within_add_menu(close:) do
-              expect(page).to have_no_test_selector("add-user-custom-field-attribute")
-            end
-          end
-
-          def click_to_create_new_custom_field(type)
-            within_add_menu do
-              click_button "User attribute"
-              click_on type
-            end
-            wait_for_network_idle
-          end
+module Admin
+  module Settings
+    module UserCustomFields
+      module Hierarchy
+        class ItemsController < Admin::CustomFields::Hierarchy::ItemsBaseController
+          menu_item :user_custom_fields_settings
 
           private
 
-          def within_add_menu(close: false, &)
-            wait_for_network_idle
-
-            button = find_button("Add")
-            button.click
-            within(button.ancestor("action-menu").find("action-list"), &)
-            button.click if close
+          def find_custom_field
+            @custom_field = CustomField.hierarchy_root_and_children.find(params[:user_custom_field_id])
           end
         end
       end

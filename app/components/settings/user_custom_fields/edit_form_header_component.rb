@@ -45,7 +45,13 @@ module Settings
           }
         ]
 
-        if @custom_field.list?
+        if @custom_field.hierarchical_list?
+          tabs << {
+            name: "items",
+            path: admin_settings_user_custom_field_items_path(@custom_field),
+            label: t(:label_item_plural)
+          }
+        elsif @custom_field.list?
           tabs << {
             name: "items",
             path: list_items_admin_settings_user_custom_field_path(@custom_field),
