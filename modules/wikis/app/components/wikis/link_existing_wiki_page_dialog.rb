@@ -34,8 +34,6 @@ module Wikis
 
     attr_reader :linkable, :provider
 
-    SEARCH_RESULTS_FRAME_ID = "search-wiki-page-results"
-
     def initialize(linkable:, provider:, **)
       super(nil, **)
 
