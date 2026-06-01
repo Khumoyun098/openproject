@@ -88,7 +88,7 @@ export class PersistentToggleComponent implements OnInit {
     window.OpenProject.guardedLocalStorage(this.identifier, (!!isNowHidden).toString());
 
     const targetNotification = this.targetNotification;
-    if (!targetNotification) return; 
+    if (!targetNotification) return;
 
     if (isNowHidden) {
       slideUp(targetNotification, 400);

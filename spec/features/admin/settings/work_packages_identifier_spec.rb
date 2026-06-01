@@ -48,7 +48,7 @@ RSpec.describe "Work packages identifier admin settings", :js do
   context "when no projects have problematic identifiers" do
     it "saves the setting without showing a dialog" do
       visit_settings
-      choose "Project-based semantic identifiers"
+      choose "Project-based semantic identifiers (Beta)"
 
       click_button "Convert identifiers"
 
@@ -80,7 +80,7 @@ RSpec.describe "Work packages identifier admin settings", :js do
     context "when switching to semantic" do
       before do
         visit_settings
-        choose "Project-based semantic identifiers"
+        choose "Project-based semantic identifiers (Beta)"
       end
 
       it "shows the autofix section after selecting semantic" do

@@ -210,13 +210,6 @@ sv:
           new_date: "(ny)"
         add_non_working_day: Arbetsfri dag
         already_added_error: Det finns redan en arbetsfri dag för detta datum. Det kan bara skapas en arbetsfri dag för varje unikt datum.
-        change_button: Spara och boka om
-        change_title: Ändra arbetsdagar
-        removed_title: 'Du kommer att ta bort följande dagar från listan över arbetsfria dagar:'
-        change_description: Att ändra vilka veckodagar som anses vara arbetsdagar eller icke-arbetsdagar kan påverka start- och slutdagar för alla arbetspaket och livscykler i alla projekt i detta fall.
-        warning: 'Förändringarna kan ta lite tid att träda i kraft. Du kommer att meddelas när alla relevanta arbetspaket och projektlivscykler har uppdaterats. Är du säker på att du vill fortsätta?
-
-          '
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: Om du ändrar läget för beräkning av framsteg från statusbaserat till arbetsbaserat blir fältet <i>% Complete</i> fritt redigerbart. Om du anger värden för <i>arbete</i> eller <i>återstående</i> arbete kommer de också att kopplas till <i>% Complete</i>. Om du ändrar <i>Återstående arbete</i> kan du uppdatera <i>% Fullständigt</i>.
         warning_progress_calculation_mode_change_from_field_to_status_html: Att ändra lägesberäkning från arbetsbaserad till status-baserad kommer att resultera i alla befintliga <i>% Slutför</i> värden som ska förloras och ersättas med värden som är associerade med varje status. Befintliga värden för <i>Återstående arbete</i> kan också räknas om för att återspegla denna förändring. Denna åtgärd är inte reversibel.

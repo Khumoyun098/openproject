@@ -57,7 +57,7 @@ ar:
       col_identifier: Identifier
       col_project: Project
       col_reserved: Reserved
-      not_available_in_semantic_mode: Reserved identifiers are only available in classic identifier mode.
+      not_available_in_semantic_mode: Reserved identifiers are only available in numeric identifier mode.
       filter_label: Filter identifiers
       btn_release: Release
       released_notice: Identifier "%{identifier}" has been released.
@@ -1803,6 +1803,7 @@ ar:
       attachment:
         attachment_content: Attachment content
         attachment_file_name: Attachment file name
+        charset: Character set
         content_type: Content-type
         downloads: التحميلات
         file: ملف
@@ -1897,6 +1898,7 @@ ar:
         title: Title
         description: Description
       member:
+        blocked: Blocked
         roles: دور
       notification:
         read_ian: Read in-app
@@ -3764,6 +3766,9 @@ ar:
     additional:
       projects: أحدث المشاريع المرئية في هذه الجلسة.
       no_visible_projects: There are no visible projects in this instance.
+      favorite_projects:
+        no_results: You have no favorite projects
+        no_results_subtext: Add one or multiple projects as favorite through their overview or in a project list.
       users: أحدث المستخدمين المسجلين في هذه الجلسة.
     blocks:
       community: مجتمع أوبِن بروجِكت
@@ -5621,7 +5626,7 @@ ar:
   setting_welcome_on_homescreen: كتلة الترحيب عرض على الشاشة الرئيسية
   setting_work_packages_identifier_classic: Instance-wide numerical sequence (default)
   setting_work_packages_identifier_classic_caption: 'Every work package gets a sequential number starting with 1 (for example, #1234). The numbers are unique within the instance and remain the same even if work packages are moved between projects.'
-  setting_work_packages_identifier_semantic: Project-based semantic identifiers
+  setting_work_packages_identifier_semantic: Project-based semantic identifiers (Beta)
   setting_work_packages_identifier_semantic_caption: Every project has a unique project identifier prefixed to a number (for example, PROJ-11). The numbering of each project starts at 1. If a work package is moved to another project, a new identifier is generated but the old one will continue to function.
   setting_work_package_list_default_highlighting_mode: Default highlighting mode
   setting_work_package_list_default_highlighted_attributes: Default inline highlighted attributes
@@ -6247,6 +6252,17 @@ ar:
     warning: 'Changing which days of the week are considered working days or non-working days can affect the start and finish days of all work packages and life cycles in all projects in this instance.
 
       '
+    dialog:
+      title: Change working days
+      description: 'Changing which days of the week are considered working days or non-working days can affect the start and finish days of all work packages and life cycles in all projects in this instance.
+
+        '
+      removed_title: 'You will remove the following days from the non-working days list:'
+      warning: 'The changes might take some time to take effect. You will be notified when all relevant work packages and project life cycles have been updated.
+
+        '
+      heading: Change the working days?
+      confirm_button: Save and reschedule
     journal_note:
       changed: _**Working days** changed (%{changes})._
       days:

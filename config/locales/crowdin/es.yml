@@ -57,7 +57,7 @@ es:
       col_identifier: Identificador
       col_project: Proyecto
       col_reserved: Reservado
-      not_available_in_semantic_mode: Los identificadores reservados sólo están disponibles en el modo de identificador clásico.
+      not_available_in_semantic_mode: Reserved identifiers are only available in numeric identifier mode.
       filter_label: Identificadores de filtro
       btn_release: Lanzamiento
       released_notice: El identificador "%{identifier}" ha sido liberado.
@@ -1714,6 +1714,7 @@ es:
       attachment:
         attachment_content: Contenido del archivo adjunto
         attachment_file_name: Nombre de archivo adjunto
+        charset: Character set
         content_type: Tipo de contenido
         downloads: Descargas
         file: Archivo
@@ -1808,6 +1809,7 @@ es:
         title: Título
         description: Descripción
       member:
+        blocked: Blocked
         roles: Perfiles
       notification:
         read_ian: Leer dentro de la aplicación
@@ -3501,6 +3503,9 @@ es:
     additional:
       projects: Projectos visibles mas recientes en esta instancia.
       no_visible_projects: No hay ningún proyecto visible en esta instancia.
+      favorite_projects:
+        no_results: You have no favorite projects
+        no_results_subtext: Add one or multiple projects as favorite through their overview or in a project list.
       users: Usuarios registrados mas recientes en esta instancia.
     blocks:
       community: OpenProject Community
@@ -5340,7 +5345,7 @@ es:
   setting_welcome_on_homescreen: Mostrar bloque de bienvenida en la pagina de inicio
   setting_work_packages_identifier_classic: Secuencia numérica para toda la instancia (predeterminada)
   setting_work_packages_identifier_classic_caption: 'Every work package gets a sequential number starting with 1 (for example, #1234). The numbers are unique within the instance and remain the same even if work packages are moved between projects.'
-  setting_work_packages_identifier_semantic: Identificadores semánticos basados en proyectos
+  setting_work_packages_identifier_semantic: Project-based semantic identifiers (Beta)
   setting_work_packages_identifier_semantic_caption: Every project has a unique project identifier prefixed to a number (for example, PROJ-11). The numbering of each project starts at 1. If a work package is moved to another project, a new identifier is generated but the old one will continue to function.
   setting_work_package_list_default_highlighting_mode: Modo de resaltado predeterminado
   setting_work_package_list_default_highlighted_attributes: Atributos resaltados en línea predeterminados
@@ -5950,6 +5955,17 @@ es:
     warning: 'Cambiar qué días de la semana se consideran laborables y cuáles no, puede afectar a las fechas de inicio y fin de todos los paquetes de trabajo y ciclos de vida en todos los proyectos de esta instancia.
 
       '
+    dialog:
+      title: Change working days
+      description: 'Changing which days of the week are considered working days or non-working days can affect the start and finish days of all work packages and life cycles in all projects in this instance.
+
+        '
+      removed_title: 'You will remove the following days from the non-working days list:'
+      warning: 'The changes might take some time to take effect. You will be notified when all relevant work packages and project life cycles have been updated.
+
+        '
+      heading: Change the working days?
+      confirm_button: Save and reschedule
     journal_note:
       changed: _**Días laborales** cambiados (%{changes})._
       days:

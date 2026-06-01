@@ -210,13 +210,6 @@ it:
           new_date: "(nuovo)"
         add_non_working_day: Giorno non lavorativo
         already_added_error: Esiste già un giorno non lavorativo per questa data. Può essere creato un solo giorno non lavorativo per ogni data univoca.
-        change_button: Salva e riprogramma
-        change_title: Cambia giorni lavorativi
-        removed_title: 'Rimuoverai i seguenti giorni dall''elenco dei giorni non lavorativi:'
-        change_description: Cambiare quali giorni della settimana sono considerati giorni lavorativi o giorni non lavorativi può influenzare l'inizio e la fine di tutte le macro-attività e i cicli di vita in tutti i progetti in questo caso.
-        warning: 'L''applicazione delle modifiche potrebbe richiedere del tempo. Riceverai una notifica quando tutte le macro-attività e i cicli di vita dei progetti pertinenti saranno aggiornati. Vuoi davvero continuare?
-
-          '
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: La modifica della modalità di calcolo dei progressi da basata sullo stato a basata sul lavoro renderà il campo <i>% completamento</i> liberamente modificabile. Se inserisci facoltativamente valori per <i>Lavoro</i> o <i>Lavoro residuo</i>, questi verranno collegati anche a <i>% completamento</i>. La modifica di <i>Lavoro residuo</i> può quindi aggiornare <i>% completamento</i>.
         warning_progress_calculation_mode_change_from_field_to_status_html: Cambiando la modalità di calcolo dell'avanzamento da basata sul lavoro a basata sullo stato porvocherà la perdita di tutti i valori <i>% Complete</i> esistenti e saranno sostituiti con i valori associati ad ogni stato. I valori esistenti per il lavoro <i>rimanente</i> potrebbero anche essere ricalcolati per riflettere questo cambiamento. Questa azione non è reversibile.

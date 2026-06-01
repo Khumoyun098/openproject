@@ -40,7 +40,7 @@ fr:
         unit_plural: Nom pluriel de l'unité
         default: Type de coût par défaut
         for_all_projects: For all projects
-        rates: Rates
+        rates: Tarifs
       work_package:
         costs_by_type: Unités consommées
         labor_costs: Coûts de main d'œuvre
@@ -93,7 +93,7 @@ fr:
         cost_types_project:
           attributes:
             project_ids:
-              blank: Please select a project.
+              blank: Veuillez sélectionner un projet.
   attributes:
     comment: Commentaire
     cost_type: Types de coût
@@ -240,16 +240,16 @@ fr:
       no_cost_types_available: No cost types are available in this project. Please contact an administrator.
     admin:
       columns:
-        active_projects: Active projects
+        active_projects: Projets actifs
       cost_type_projects:
         for_all_projects_blank_slate:
           heading: This cost type is enabled in all projects
           description: Uncheck "For all projects" on the details tab to limit this cost type to specific projects.
         no_projects:
-          heading: No projects assigned
+          heading: Aucun projet assigné
           description: Add projects so this cost type can be used in them.
       rates:
-        title: Rate history
+        title: Historique des tarifs
     settings:
       time_and_costs: Time & Costs
       cost_types:

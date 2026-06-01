@@ -210,13 +210,6 @@ tr:
           new_date: "(yeni)"
         add_non_working_day: Çalışılmayan günler
         already_added_error: Bu tarih için çalışılmayan bir gün zaten var. Her benzersiz tarih için yalnızca bir çalışılmayan gün oluşturulabilir.
-        change_button: Kaydet ve yeniden planla
-        change_title: İş günlerini değiştir
-        removed_title: 'Aşağıdaki günleri çalışılmayan günler listesinden çıkaracaksınız:'
-        change_description: Haftanın hangi günlerinin iş günü veya iş günü olmayan günler olarak kabul edileceğinin değiştirilmesi, bu sistemdeki tüm projelerdeki tüm iş paketlerinin ve yaşam döngülerinin başlangıç ve bitiş günlerini etkileyebilir.
-        warning: 'Değişikliklerin yürürlüğe girmesi biraz zaman alabilir. İlgili tüm iş paketleri ve proje yaşam döngüleri güncellendiğinde size bildirilecektir. Devam etmek istediğinizden emin misiniz?
-
-          '
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: İlerleme hesaplama modunu durum bazlıdan iş bazlıya değiştirmek <i>% Tamamlandı</i> alanını serbestçe düzenlenebilir hale getirecektir. <i>İş</i> veya <i>Kalan iş</i> için isteğe bağlı olarak değerler girerseniz, bunlar da <i>%</i> Tamamlandı ile bağlantılı olacaktır. <i>Kalan işin</i> değiştirilmesi <i>%</i> Tamamlanan'ı güncelleyebilir.
         warning_progress_calculation_mode_change_from_field_to_status_html: İlerleme hesaplama modunun iş bazlıdan durum bazlıya değiştirilmesi, mevcut tüm <i>% Tamamlandı</i> değerlerinin kaybolmasına ve her bir durumla ilişkili değerlerle değiştirilmesine neden olacaktır. <i>Kalan iş</i> için mevcut değerler de bu değişikliği yansıtacak şekilde yeniden hesaplanabilir. Bu eylem geri döndürülemez.

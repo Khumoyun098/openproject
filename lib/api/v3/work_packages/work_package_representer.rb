@@ -582,7 +582,8 @@ module API
                               if represented.parent&.visible?
                                 {
                                   href: api_v3_paths.work_package(represented.parent.id),
-                                  title: represented.parent.subject
+                                  title: represented.parent.subject,
+                                  displayId: represented.parent.display_id.to_s
                                 }
                               else
                                 {

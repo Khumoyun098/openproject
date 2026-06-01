@@ -51,7 +51,14 @@ module Wikis::Admin::Forms
     def resolved_oauth_client
       oauth_client ||
         wiki_provider.oauth_client ||
-        wiki_provider.build_oauth_client(client_id: Wikis::XWikiProvider.generate_client_id)
+        wiki_provider.build_oauth_client(
+          client_id: Wikis::XWikiProvider.generate_client_id,
+          client_secret: Wikis::XWikiProvider.generate_client_secret
+        )
+    end
+
+    def validation_message_for(attribute)
+      resolved_oauth_client.errors.messages_for(attribute).to_sentence.presence
     end
   end
 end

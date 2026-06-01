@@ -33,7 +33,7 @@ fr:
           title: Sous-éléments
         project_favorites:
           title: Projets favoris
-          no_results: Vous n'avez actuellement aucun projet favori. Cliquez sur l'icône en forme d'étoile dans le tableau de bord du projet pour en ajouter un à vos favoris.
+          no_results: You currently have no favorite projects. Add one or multiple projects as favorite through their overview or in a project list.
         time_entries_current_user:
           title: Mon temps passé
           displayed_days: 'Jours affichés dans le widget :'

@@ -75,8 +75,12 @@ Rails.application.routes.draw do
   get "/auth/:provider", to: proc { [404, {}, [""]] }, as: "omni_auth_start"
   match "/auth/:provider/callback", to: "omni_auth_login#callback", as: "omni_auth_callback", via: %i[get post]
 
-  get "/.well-known/oauth-authorization-server", to: "oauth_metadata#authorization_server", as: :authorization_server_metadata
-  get "/.well-known/oauth-protected-resource", to: "oauth_metadata#protected_resource", as: :protected_resource_metadata
+  scope ".well-known" do
+    get "oauth-authorization-server", to: "oauth_metadata#authorization_server", as: :authorization_server_metadata
+    get "oauth-protected-resource", to: "oauth_metadata#protected_resource", as: :protected_resource_metadata
+
+    get "openproject-metadata", to: "openproject_metadata#show"
+  end
 
   # In case assets are actually delivered by a node server (e.g. in test env)
   # forward requests to the proxy

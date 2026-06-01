@@ -101,29 +101,79 @@ RSpec.describe "BlockNote editor rendering", :js, :selenium, with_settings: { re
       expect(editor.element.text).to match(/AAA test.*CCC test.*BBB test/m)
     end
 
-    it "is possible to add link work package blocks" do
-      pending "will be fixed with https://community.openproject.org/wp/75231"
+    context "when inserting work package links into the editor" do
+      let(:status) { create(:status, name: "Open") }
+      let(:type) { create(:type, name: "Life Goals") }
+      let(:work_package) do
+        create(:work_package,
+               project: document.project,
+               subject: "pet a tiger",
+               status:,
+               type:)
+      end
 
-      status = create(:status, name: "Open")
-      type = create(:type, name: "Life Goals")
-      work_package = create(:work_package,
-                            project: document.project,
-                            subject: "pet a tiger",
-                            status:,
-                            type:)
+      before { work_package } # force eager creation before visiting the page
 
-      visit document_path(document)
-      expect(page).to have_test_selector("blocknote-document-description")
+      it "inserts link work package cards with slash command" do
+        visit document_path(document)
+        expect(page).to have_test_selector("blocknote-document-description")
 
-      editor.open_add_work_package_dialog
-      editor.search_and_select_work_package("tiger", "pet a tiger")
+        editor.open_add_work_package_dialog
+        editor.search_and_select_work_package("tiger", "pet a tiger")
 
-      expect(editor.element).to have_no_text("Link existing work package") # search dialog is closed
-      expect(editor.element).to have_no_text("…") # work package is loaded
-      expect(editor.element.text).to match(/#\d+\sLIFE GOALS\sOpen\spet a tiger/)
+        expect(editor.element).to have_no_text("Link existing work package") # search dialog is closed
+        expect(editor.element).to have_no_text("…") # work package is loaded
+        expect(editor.element.text).to match(/##{work_package.display_id}\sLIFE GOALS\sOpen\spet a tiger/)
 
-      # Capybara's have_link seems not to work in a shadow dom, so it's tested via the property
-      expect(editor.element.find_link(text: "pet a tiger").native.property("href")).to end_with("/wp/#{work_package.id}")
+        # Capybara's have_link seems not to work in a shadow dom, so it's tested via the property
+        expect(editor.element.find_link(text: "pet a tiger").native.property("href")).to end_with("/wp/#{work_package.id}")
+      end
+
+      it "inserts an xxs inline link via # notation" do
+        visit document_path(document)
+        expect(page).to have_test_selector("blocknote-document-description")
+
+        editor.element.send_keys("#tiger")
+        editor.wait_for_shadow_content("pet a tiger")
+        send_keys(:enter)
+        expect(editor.element).to have_no_text("#tiger") # wait for work package to load
+
+        expect(editor.element).to have_no_text("…") # inline chip loading state
+        expect(editor.element.text).to match(/##{work_package.display_id}/)
+        # xxs chip shows only the ID — no title link
+      end
+
+      it "inserts an xs inline link via ## notation" do
+        visit document_path(document)
+        expect(page).to have_test_selector("blocknote-document-description")
+
+        editor.element.send_keys("##tiger")
+        editor.wait_for_shadow_content("pet a tiger")
+        send_keys(:enter)
+        expect(editor.element).to have_no_text("##tiger") # wait for work package to load
+
+        expect(editor.element).to have_no_text("…")
+        expect(editor.element.text).to match(/##{work_package.display_id}\sLIFE GOALS\spet a tiger/)
+        # Capybara's have_link seems not to work in a shadow dom, so it's tested via the property
+        expect(editor.element.find_link(text: "pet a tiger").native.property("href"))
+          .to end_with("/wp/#{work_package.id}")
+      end
+
+      it "inserts an s inline link via ### notation" do
+        visit document_path(document)
+        expect(page).to have_test_selector("blocknote-document-description")
+
+        editor.element.send_keys("###tiger")
+        editor.wait_for_shadow_content("pet a tiger")
+        send_keys(:enter)
+        expect(editor.element).to have_no_text("###tiger") # wait for work package to load
+
+        expect(editor.element).to have_no_text("…")
+        expect(editor.element.text).to match(/##{work_package.display_id}\sLIFE GOALS\sOpen\spet a tiger/)
+        # Capybara's have_link seems not to work in a shadow dom, so it's tested via the property
+        expect(editor.element.find_link(text: "pet a tiger").native.property("href"))
+          .to end_with("/wp/#{work_package.id}")
+      end
     end
   end
 end

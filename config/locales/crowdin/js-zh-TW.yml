@@ -210,13 +210,6 @@ zh-TW:
           new_date: "（新）"
         add_non_working_day: 非工作日
         already_added_error: 該日期已存在非工作日。每個唯一日期只能創建一個非工作日。
-        change_button: 儲存後重新編排
-        change_title: 修改工作日
-        removed_title: 您將從非工作日列表中刪除以下日期：
-        change_description: 變更一週中哪些天為工作日或非工作日，可能會影響此實例中所有專案的所有工作套件與生命週期的開始和結束日期。
-        warning: '變更可能需要一些時間才能生效。當所有相關的工作套件與專案生命週期更新完成後，您將會收到通知。 您確定要繼續嗎？
-
-          '
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: 將進度計算模式從基於狀態變更為基於工作將使<i>完成百分比</i>欄位可自由編輯。如果您選擇輸入<i>工時</i>或<i>剩餘工時</i>，它們也會連結到<i>完成百分比</i>。更改<i>剩餘工作</i>可以更新<i>完成百分比</i>。
         warning_progress_calculation_mode_change_from_field_to_status_html: 將進度計算模式從基於工時的方式改為基於狀態，將會導致所有現有的 <i>%完整的</i> 值丟失，並被與每個狀態相關的值所替代。 <i>剩餘工時</i> 的現有值也可能被重新計算，以反映這種變化。此操作不可逆轉。

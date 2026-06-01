@@ -53,21 +53,16 @@ See COPYRIGHT and LICENSE files for more details.
   ) do |subheader|
     subheader.with_quick_filter do
       render(
-          OpPrimer::QuickFilter::SegmentedComponent.new(
-            name: t(:label_filter_plural),
-            query: @query,
-            filter_key: :status,
-            path_args: %i[admin cost_types]
-          )
-        ) do |component|
-          component.with_item(label: t(:label_active), value: "active")
-          component.with_item(label: t("members.menu.locked"), value: "locked")
-        end
-    end
-
-    # TODO - Remove with https://community.openproject.org/wp/75158
-    subheader.with_filter_component do
-      render(Admin::CostTypes::FilterButtonComponent.new(query: @query))
+        OpPrimer::QuickFilter::SegmentedComponent.new(
+          name: t(:label_filter_plural),
+          query: @query,
+          filter_key: :status,
+          path_args: %i[admin cost_types]
+        )
+      ) do |component|
+        component.with_item(label: t(:label_active), value: "active")
+        component.with_item(label: t("members.menu.locked"), value: "locked")
+      end
     end
 
     subheader.with_action_button(
@@ -78,15 +73,6 @@ See COPYRIGHT and LICENSE files for more details.
       href: new_admin_cost_type_path
     ) do
       CostType.model_name.human
-    end
-
-    subheader.with_bottom_pane_component do
-      render(
-        Admin::CostTypes::FiltersComponent.new(
-          query: @query,
-          initially_expanded: @query.filters.any?
-        )
-      )
     end
   end
 %>

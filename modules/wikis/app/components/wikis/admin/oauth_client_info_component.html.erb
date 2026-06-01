@@ -10,8 +10,12 @@
         end
       end
 
-      grid.with_area(:description, tag: :div, color: :subtle) do
-        render(Primer::Beta::Text.new) { t("wikis.admin.wiki_providers.#{wiki_provider}.oauth.provider_oauth_description") }
+      grid.with_area(:description, classes: "wb-break-word", tag: :div, color: :subtle) do
+        if oauth_client.present?
+          render(Primer::Beta::Text.new) { "#{t('.label_oauth_client_id')}: #{oauth_client.client_id}" }
+        else
+          render(Primer::Beta::Text.new) { t("wikis.admin.wiki_providers.#{wiki_provider}.oauth.provider_oauth_description") }
+        end
       end
 
       if wiki_provider.persisted?

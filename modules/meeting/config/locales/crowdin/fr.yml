@@ -459,18 +459,18 @@ fr:
         one: Toutes les semaines
         other: Toutes les %{count} semaines
       x_monthly:
-        one: Every month
-        other: Every %{count} months
-      monthly_day_of_month: Day of month
-      monthly_nth_weekday: Monthly on a weekday
+        one: Chaque mois
+        other: Tous les %{count} mois
+      monthly_day_of_month: Jour du mois
+      monthly_nth_weekday: Tous les mois, un jour de semaine
       every_weekday: Chaque %{day_of_the_week}
       working_days: Chaque jour ouvrable
     monthly:
       inflected_ordinal:
-        first: first
-        second: second
-        third: third
-        fourth: fourth
+        first: premier
+        second: deuxième
+        third: troisième
+        fourth: quatrième
         last: last
       ordinal_options:
         first: First

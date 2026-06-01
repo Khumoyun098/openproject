@@ -33,7 +33,7 @@ uk:
           title: Піделементи
         project_favorites:
           title: Обрані проєкти
-          no_results: Зараз у вас немає обраних проєктів. Натисніть значок зірочки на панелі керування проєктом, щоб додати його в обране.
+          no_results: You currently have no favorite projects. Add one or multiple projects as favorite through their overview or in a project list.
         time_entries_current_user:
           title: Мій витрачений час
           displayed_days: 'Днів, доступних у віджеті:'

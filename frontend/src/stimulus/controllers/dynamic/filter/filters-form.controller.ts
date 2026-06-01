@@ -63,6 +63,7 @@ export default class FiltersFormController extends Controller {
     'singleDay',
     'dateRange',
     'simpleValue',
+    'filtersInput',
   ];
 
   declare readonly filterFormToggleTarget:HTMLButtonElement;
@@ -76,8 +77,10 @@ export default class FiltersFormController extends Controller {
   declare readonly singleDayTargets:HTMLInputElement[];
   declare readonly dateRangeTargets:HTMLInputElement[];
   declare readonly simpleValueTargets:HTMLInputElement[];
+  declare readonly filtersInputTarget:HTMLInputElement;
 
   declare readonly hasFilterFormToggleTarget:boolean;
+  declare readonly hasFiltersInputTarget:boolean;
 
   static values = {
     displayFilters: { type: Boolean, default: false },
@@ -126,6 +129,12 @@ export default class FiltersFormController extends Controller {
       this.formLoadedResolver();
       this.formLoadedResolver = null;
     }
+
+    // Populate the hidden field with the current serialized filters so the
+    // initial form state is submittable without any user interaction.
+    if (this.hasFiltersInputTarget) {
+      this.writeFiltersToHiddenInput();
+    }
   }
 
   // Register and deregister change/input listeners on input elements to reload the page's frames on user input.
@@ -144,7 +153,7 @@ export default class FiltersFormController extends Controller {
     const filterName = target.getAttribute('data-filter-name');
     if (filterName) {
       const operator = this.findTargetByName(filterName, this.operatorTargets);
-      if (operator && this.noValueOperators.includes(operator.value)) {
+      if (operator && this.operatorRequiresNoValue(operator)) {
         target.setAttribute('hidden', '');
       }
     }
@@ -244,8 +253,12 @@ export default class FiltersFormController extends Controller {
     }
   }
 
+  private get liveUpdatesEnabled():boolean {
+    return this.performTurboRequestsValue || this.hasFiltersInputTarget;
+  }
+
   private addChangeListener(target:HTMLElement) {
-    if (!this.performTurboRequestsValue) { return; }
+    if (!this.liveUpdatesEnabled) { return; }
 
     if (target instanceof HTMLInputElement) {
       target.addEventListener('input', this.boundListener);
@@ -255,7 +268,7 @@ export default class FiltersFormController extends Controller {
   }
 
   private removeChangeListener(target:HTMLElement) {
-    if (!this.performTurboRequestsValue) { return; }
+    if (!this.liveUpdatesEnabled) { return; }
 
     if (target instanceof HTMLInputElement) {
       target.removeEventListener('input', this.boundListener);
@@ -279,7 +292,7 @@ export default class FiltersFormController extends Controller {
 
     this.focusFilterValueIfPossible(selectedFilter);
 
-    if (this.performTurboRequestsValue) {
+    if (this.liveUpdatesEnabled) {
       this.sendForm();
     }
   }
@@ -321,7 +334,7 @@ export default class FiltersFormController extends Controller {
     const removedFilterOption = selectOptions.find((option) => option.value === filterName);
     removedFilterOption?.removeAttribute('disabled');
 
-    if (this.performTurboRequestsValue) {
+    if (this.liveUpdatesEnabled) {
       this.sendForm();
     }
   }
@@ -341,16 +354,24 @@ export default class FiltersFormController extends Controller {
     inputElement.dispatchEvent(inputEvent);
   }
 
-  private readonly noValueOperators = ['*', '!*', 't', 'w'];
   private readonly daysOperators = ['>t-', '<t-', 't-', '<t+', '>t+', 't+'];
   private readonly onDateOperator = '=d';
   private readonly betweenDatesOperator = '<>d';
+
+  // Whether the operator currently selected in `operatorElement` declares
+  // itself value-less. Driven by the `data-no-value` attribute that
+  // `Filters::Inputs::BaseFilterForm#add_operator` emits on each `<option>`
+  // whose `Operator.requires_value?` is false — keeps the symbol list in
+  // one place (Ruby) instead of duplicating it here.
+  private operatorRequiresNoValue(operatorElement:HTMLSelectElement):boolean {
+    return operatorElement.selectedOptions[0]?.hasAttribute('data-no-value') ?? false;
+  }
 
   setValueVisibility({ target, params: { filterName } }:{ target:HTMLSelectElement, params:{ filterName:string } }) {
     const selectedOperator = target.value;
     const valueContainer = this.findTargetByName(filterName, this.filterValueContainerTargets);
     if (valueContainer) {
-      if (this.noValueOperators.includes(selectedOperator)) {
+      if (this.operatorRequiresNoValue(target)) {
         valueContainer.setAttribute('hidden', '');
       } else {
         valueContainer.removeAttribute('hidden');
@@ -368,12 +389,23 @@ export default class FiltersFormController extends Controller {
   }
 
   autocompleteSendForm() {
-    if (this.performTurboRequestsValue) {
+    if (this.liveUpdatesEnabled) {
       this.sendForm();
     }
   }
 
   sendForm() {
+    // When we want the filter content to be written to a hidden input, do this.
+    // When we do not also want the turbo requests, we can exit early here. Otherwise the automatic redirect
+    // would also be triggered. We do not want this in the case where we use the filter input in another form
+    if (this.hasFiltersInputTarget) {
+      this.writeFiltersToHiddenInput();
+
+      if (!this.performTurboRequestsValue) {
+        return;
+      }
+    }
+
     const params = new URLSearchParams(window.location.search);
     const newFilters = this.buildFiltersParam(this.parseFilters());
 
@@ -412,6 +444,10 @@ export default class FiltersFormController extends Controller {
     }
   }
 
+  private writeFiltersToHiddenInput() {
+    this.filtersInputTarget.value = this.buildFiltersParam(this.parseFilters());
+  }
+
   private parseFilters():InternalFilterValue[] {
     const filters:InternalFilterValue[] = [];
     filters.push(...this.parseSimpleFilters());
@@ -428,7 +464,9 @@ export default class FiltersFormController extends Controller {
       const type = filter.getAttribute('data-filter-type');
       const operator = filter.getAttribute('data-filter-operator');
       if (name && type && operator) {
-        const value = this.parseFilterValue(filter, name, type, operator) as string[]|null;
+        // Quick filters carry an operator that always requires a value
+        // (the inline search input).
+        const value = this.parseFilterValue(filter, name, type, operator, false) as string[]|null;
 
         if (value) {
           filters.push({ name, operator, value });
@@ -445,11 +483,13 @@ export default class FiltersFormController extends Controller {
     advancedFilters.forEach((filter) => {
       const filterName = filter.getAttribute('data-filter-name')!;
       const filterType = filter.getAttribute('data-filter-type');
-      const parsedOperator = this.findTargetByName(filterName, this.operatorTargets)?.value;
+      const operatorTarget = this.findTargetByName(filterName, this.operatorTargets);
+      const parsedOperator = operatorTarget?.value;
       const valueContainer = this.findTargetByName(filterName, this.filterValueContainerTargets);
 
-      if (valueContainer && filterName && filterType && parsedOperator) {
-        const parsedValue = this.parseFilterValue(valueContainer, filterName, filterType, parsedOperator) as string[]|null;
+      if (valueContainer && filterName && filterType && parsedOperator && operatorTarget) {
+        const requiresNoValue = this.operatorRequiresNoValue(operatorTarget);
+        const parsedValue = this.parseFilterValue(valueContainer, filterName, filterType, parsedOperator, requiresNoValue) as string[]|null;
 
         if (parsedValue) {
           filters.push({ name: filterName, operator: parsedOperator, value: parsedValue });
@@ -481,10 +521,9 @@ export default class FiltersFormController extends Controller {
     return value && value.length > 0 ? value.replace(/"/g, '\\"') : '';
   }
 
-  private readonly operatorsWithoutValues = ['*', '!*', 't', 'w'];
   private readonly dateFilterTypes = ['datetime_past', 'date'];
 
-  private parseFilterValue(valueContainer:HTMLElement, filterName:string, filterType:string, operator:string) {
+  private parseFilterValue(valueContainer:HTMLElement, filterName:string, filterType:string, operator:string, requiresNoValue:boolean) {
     const checkbox = valueContainer.querySelector<HTMLInputElement>('input[type="checkbox"]');
 
     if (checkbox) {
@@ -495,7 +534,7 @@ export default class FiltersFormController extends Controller {
       return (valueContainer.querySelector<HTMLInputElement>('input[name="value"]'))?.value.split(',');
     }
 
-    if (this.operatorsWithoutValues.includes(operator)) {
+    if (requiresNoValue) {
       return [];
     }
 

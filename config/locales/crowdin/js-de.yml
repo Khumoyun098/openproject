@@ -210,13 +210,6 @@ de:
           new_date: "(neu)"
         add_non_working_day: Arbeitsfreier Tag
         already_added_error: Für dieses Datum existiert bereits ein arbeitsfreier Tag. Für jedes einzelne Datum kann nur ein arbeitsfreier Tag erstellt werden.
-        change_button: Speichern und neu planen
-        change_title: Arbeitstage ändern
-        removed_title: 'Sie werden die folgenden Tage aus der Liste der arbeitsfreien Tage entfernen:'
-        change_description: Die Änderung der Wochentage, die als Arbeitstage oder arbeitsfreie Tage gelten, kann sich auf die Start- und Endtage aller Arbeitspakete und Projektphasen in allen Projekten auswirken.
-        warning: 'Es kann einige Zeit dauern, bis die Änderungen wirksam werden. Sie werden benachrichtigt, wenn alle relevanten Arbeitspakete und Projektphasen aktualisiert worden sind. Sind Sie sicher, dass Sie fortfahren möchten?
-
-          '
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: Wenn Sie den Modus der Fortschrittsberechnung von statusbasiert auf arbeitsbasiert ändern, ist das Feld <i>% abgeschlossen</i> frei editierbar. Wenn Sie optional Werte für <i>Aufwand</i> oder <i>Verbleibenden Aufwand</i> eingeben, werden diese auch mit <i>% abgeschlossen</i> verknüpft. Eine Änderung des <i>verbleibenden Aufwands</i> aktualisiert dann <i>% abgschlossen</i>.
         warning_progress_calculation_mode_change_from_field_to_status_html: Wenn Sie den Modus der Fortschrittsberechnung von aufwandsbezogen auf statusbezogen ändern, gehen alle bestehenden Werte für <i>% Fertigstellung</i> verloren und werden durch Werte ersetzt, die mit dem jeweiligen Status verbunden sind. Bestehende Werte für <i>Verbleibender Aufwand</i> können ebenfalls neu berechnet werden, um diese Änderung widerzuspiegeln. Diese Aktion ist nicht umkehrbar.

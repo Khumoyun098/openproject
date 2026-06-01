@@ -27,7 +27,6 @@
 //++
 
 import { AfterViewInit, ChangeDetectorRef, Directive, ElementRef, EventEmitter, Input, OnDestroy, Output, inject } from '@angular/core';
-import { WorkPackageResource } from 'core-app/features/hal/resources/work-package-resource';
 import { HalResource } from 'core-app/features/hal/resources/hal-resource';
 import { HalEventsService } from 'core-app/features/hal/services/hal-events.service';
 import { ToastService } from 'core-app/shared/components/toaster/toast.service';
@@ -132,11 +131,11 @@ export class ModalWithTurboContentDirective implements AfterViewInit, OnDestroy 
 
     if (fetchResponse?.succeeded) {
       this.halEvents.push(
-        this.resource as WorkPackageResource,
+        this.resource,
         { eventType: 'updated' },
       );
 
-      void this.apiV3Service.work_packages.id(this.resource as WorkPackageResource).refresh();
+      void this.apiV3Service.work_packages.id(this.resource).refresh();
 
       this.successfulUpdate.emit();
 

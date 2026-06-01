@@ -66,13 +66,13 @@ en:
       col_identifier: "Identifier"
       col_project: "Project"
       col_reserved: "Reserved"
-      not_available_in_semantic_mode: "Reserved identifiers are only available in classic identifier mode."
+      not_available_in_semantic_mode: "Reserved identifiers are only available in numeric identifier mode."
       filter_label: "Filter identifiers"
       btn_release: "Release"
-      released_notice: "Identifier \"%{identifier}\" has been released."
+      released_notice: 'Identifier "%{identifier}" has been released.'
       dialog:
         title: "Release identifier"
-        heading: "Release \"%{identifier}\"?"
+        heading: 'Release "%{identifier}"?'
         description: "Releasing this identifier cannot be undone. External links and integrations using it will stop resolving, and the name becomes available for any new project to claim."
         checkbox_label: "I understand that this cannot be undone."
         confirm_button: "Release identifier"
@@ -1548,7 +1548,7 @@ en:
             one: "Successfully copied workflow to '%{type_name}' type."
             other: "Successfully copied workflow to %{count} types."
       new:
-        title: "Copy workflow of \"%{source_type}\""
+        title: 'Copy workflow of "%{source_type}"'
     form:
       matrix_caption: "Workflow matrix"
       matrix_caption_assignee: "Workflow matrix for assignee"
@@ -1829,7 +1829,7 @@ en:
       changeset:
         repository: "Repository"
       comment:
-        commented: "Commented"  # an object that this comment belongs to
+        commented: "Commented" # an object that this comment belongs to
       custom_action:
         actions: "Actions"
       custom_field:
@@ -1903,6 +1903,7 @@ en:
         title: Title
         description: Description
       member:
+        blocked: "Blocked"
         roles: "Roles"
       notification:
         read_ian: "Read in-app"
@@ -2123,7 +2124,7 @@ en:
         redirect_existing_links: "Redirect existing links"
         text: "Page content"
       work_package:
-        ancestor: "Descendants of"  # used for filtering of work packages that are descendants of a given work package
+        ancestor: "Descendants of" # used for filtering of work packages that are descendants of a given work package
         begin_insertion: "Begin of the insertion"
         begin_deletion: "Begin of the deletion"
         children: "Subelements"
@@ -2141,13 +2142,14 @@ en:
           false: "working days only"
           true: "include non-working days"
         journal_internal: Internal Journal
-        notify: "Notify"  # used in custom actions
+        notify: "Notify" # used in custom actions
         parent: "Parent"
         parent_issue: "Parent"
         parent_work_package: "Parent"
         priority: "Priority"
         progress: "% Complete"
         readonly: "Read only"
+        relatable: "Relatable to"
         remaining_hours: "Remaining work"
         remaining_time: "Remaining work"
         sequence_number: "Sequence number"
@@ -4860,8 +4862,8 @@ en:
       A new user (%{email}) tried to create an account on an OpenProject environment that you manage (%{host}).
       The user cannot activate their account since the user limit has been reached.
     steps:
-      a: "Upgrade your payment plan ([here](upgrade_url))"  # here turned into a link
-      b: "Lock or delete an existing user ([here](users_url))"  # here turned into a link
+      a: "Upgrade your payment plan ([here](upgrade_url))" # here turned into a link
+      b: "Lock or delete an existing user ([here](users_url))" # here turned into a link
       label: "To allow the user to sign in you can either: "
 
   more_actions: "More functions"
@@ -5539,7 +5541,7 @@ en:
   setting_welcome_on_homescreen: "Display welcome block on homescreen"
   setting_work_packages_identifier_classic: Instance-wide numerical sequence (default)
   setting_work_packages_identifier_classic_caption: "Every work package gets a sequential number starting with 1 (for example, #1234). The numbers are unique within the instance and remain the same even if work packages are moved between projects."
-  setting_work_packages_identifier_semantic: Project-based semantic identifiers
+  setting_work_packages_identifier_semantic: "Project-based semantic identifiers (Beta)"
   setting_work_packages_identifier_semantic_caption: "Every project has a unique project identifier prefixed to a number (for example, PROJ-11). The numbering of each project starts at 1. If a work package is moved to another project, a new identifier is generated but the old one will continue to function."
   setting_work_package_list_default_highlighting_mode: "Default highlighting mode"
   setting_work_package_list_default_highlighted_attributes: "Default inline highlighted attributes"

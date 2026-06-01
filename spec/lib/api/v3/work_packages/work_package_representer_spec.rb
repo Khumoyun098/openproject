@@ -1089,6 +1089,11 @@ RSpec.describe API::V3::WorkPackages::WorkPackageRepresenter do
             let(:href) { api_v3_paths.work_package(visible_parent.id) }
             let(:title) { visible_parent.subject }
           end
+
+          it "exposes displayId on the parent link" do
+            expect(parse_json(subject).dig("_links", "parent", "displayId"))
+              .to eq(visible_parent.display_id.to_s)
+          end
         end
 
         context "when parent not visible" do

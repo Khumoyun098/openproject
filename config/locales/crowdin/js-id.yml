@@ -210,13 +210,6 @@ id:
           new_date: "(new)"
         add_non_working_day: Non-working day
         already_added_error: A non-working day for this date exists already. There can only be one non-working day created for each unique date.
-        change_button: Save and reschedule
-        change_title: Ubah hari kerja
-        removed_title: 'You will remove the following days from the non-working days list:'
-        change_description: Perubahan hari dalam seminggu yang dianggap sebagai hari kerja atau hari libur dapat memengaruhi tanggal mulai dan selesai dari semua paket kerja dan siklus hidup dalam semua proyek pada kasus ini.
-        warning: 'Perubahan tersebut mungkin memerlukan waktu untuk berlaku. Anda akan diberitahu ketika semua paket kerja yang relevan dan siklus hidup proyek telah diperbarui. Apakah Anda yakin ingin melanjutkan?
-
-          '
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: Changing progress calculation mode from status-based to work-based will make the <i>% Complete</i> field freely editable. If you optionally enter values for <i>Work</i> or <i>Remaining work</i>, they will also be linked to <i>% Complete</i>. Changing <i>Remaining work</i> can then update <i>% Complete</i>.
         warning_progress_calculation_mode_change_from_field_to_status_html: Changing progress calculation mode from work-based to status-based will result in all existing <i>% Complete</i> values to be lost and replaced with values associated with each status. Existing values for <i>Remaining work</i> may also be recalculated to reflect this change. This action is not reversible.

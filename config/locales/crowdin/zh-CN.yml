@@ -57,7 +57,7 @@ zh-CN:
       col_identifier: Identifier
       col_project: Project
       col_reserved: Reserved
-      not_available_in_semantic_mode: Reserved identifiers are only available in classic identifier mode.
+      not_available_in_semantic_mode: Reserved identifiers are only available in numeric identifier mode.
       filter_label: Filter identifiers
       btn_release: Release
       released_notice: Identifier "%{identifier}" has been released.
@@ -1696,6 +1696,7 @@ zh-CN:
       attachment:
         attachment_content: 附件内容
         attachment_file_name: 附件文件名
+        charset: Character set
         content_type: 内容类型
         downloads: 下载
         file: 文件
@@ -1790,6 +1791,7 @@ zh-CN:
         title: 标题
         description: 描述
       member:
+        blocked: Blocked
         roles: 角色
       notification:
         read_ian: 在app中读取
@@ -3444,6 +3446,9 @@ zh-CN:
     additional:
       projects: 此 OpenProject 实例中的最新可见项目。
       no_visible_projects: 这个 OpenProject 中没有可见的项目。
+      favorite_projects:
+        no_results: You have no favorite projects
+        no_results_subtext: Add one or multiple projects as favorite through their overview or in a project list.
       users: 此 OpenProject 实例中的最新注册用户。
     blocks:
       community: OpenProject 社区
@@ -5277,7 +5282,7 @@ zh-CN:
   setting_welcome_on_homescreen: 在主屏幕上显示欢迎信息
   setting_work_packages_identifier_classic: 实例范围的数字序列（默认）
   setting_work_packages_identifier_classic_caption: 'Every work package gets a sequential number starting with 1 (for example, #1234). The numbers are unique within the instance and remain the same even if work packages are moved between projects.'
-  setting_work_packages_identifier_semantic: 基于项目的语义标识符
+  setting_work_packages_identifier_semantic: Project-based semantic identifiers (Beta)
   setting_work_packages_identifier_semantic_caption: Every project has a unique project identifier prefixed to a number (for example, PROJ-11). The numbering of each project starts at 1. If a work package is moved to another project, a new identifier is generated but the old one will continue to function.
   setting_work_package_list_default_highlighting_mode: 默认突出显示模式
   setting_work_package_list_default_highlighted_attributes: 默认内联突出显示属性
@@ -5890,6 +5895,17 @@ zh-CN:
     warning: '在这种情况下，更改一周中哪几天被视为工作日或非工作日会影响所有项目中所有工作包和生命周期的开始日期和结束日期。
 
       '
+    dialog:
+      title: Change working days
+      description: 'Changing which days of the week are considered working days or non-working days can affect the start and finish days of all work packages and life cycles in all projects in this instance.
+
+        '
+      removed_title: 'You will remove the following days from the non-working days list:'
+      warning: 'The changes might take some time to take effect. You will be notified when all relevant work packages and project life cycles have been updated.
+
+        '
+      heading: Change the working days?
+      confirm_button: Save and reschedule
     journal_note:
       changed: _**工作日**已更改（%{changes}）。_
       days:

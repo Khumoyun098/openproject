@@ -3,15 +3,17 @@ ko:
   activerecord:
     attributes:
       wikis/page_link:
+        identifier: Identifier
         provider: 위키 공급자
+      wikis/provider:
+        name: Name
+        universal_identifier: Universal identifier
       wikis/xwiki_provider:
         authentication_method: 인증 방법
         authentication_methods:
           oauth2_sso: OpenID Connect ID 공급자를 통한 Single-Sign-On
           two_way_oauth2: 양방향 OAuth 2.0 인증 코드 흐름
-        name: 이름
         token_exchange_scope: XWiki 범위
-        universal_identifier: 범용 식별자
         url: 인스턴스 URL
         wiki_audience: XWiki 오디언스
     errors: {}
@@ -31,8 +33,16 @@ ko:
     buttons:
       connect_account: "%{provider} 계정 연결"
       done_continue: 완료, 계속
+      open_wiki: Open wiki
       save_and_continue: 저장 및 계속
       wiki_page: 위키 페이지
+    instructions:
+      xwiki:
+        integration: XWiki Administration
+        oauth_application_details_html: The client secret value will not be accessible again after you close this window. Please copy these values into the [XWiki OpenProject Integration settings](xwiki_admin_link).
+    provider_types:
+      xwiki:
+        name: XWiki
     delete_relation_page_link_confirmation_dialog:
       title: Delete related wiki page link
       heading: Delete related wiki page link?
@@ -53,6 +63,8 @@ ko:
     work_package_wikis_tab_component:
       inline_page_links: 인라인 페이지 링크
       referencing_pages: '다음에서 참조됨:'
+    link_existing_wiki_page_dialog:
+      title: Add existing wiki page
     page_links:
       errors:
         page_not_found: Linked wiki page no longer available
@@ -61,6 +73,8 @@ ko:
     page_link_component:
       remove: 페이지 링크 제거
     relation_page_links_component:
+      link_existing: Existing wiki page
+      link_new: New wiki page
       empty_heading: 관련 페이지 없음
       empty_text: 다른 관련 위키 페이지에 대한 링크를 수동으로 추가합니다.
     oauth_login_component:
@@ -74,12 +88,15 @@ ko:
         description_html: The wiki provider %{wiki_provider} and all the related wiki page links will be deleted. In addition, every inline wiki page link will no longer be accessible. This action is irreversible.
       forms:
         general_info_form_component:
-          xwiki_instance_description: 설정을 수행하기 전에 XWiki 인스턴스에서 관리 권한이 있는지 확인하세요.
+          provider_description: Please make sure you have administration privileges in your XWiki instance before doing the setup.
         oauth_application_form_component:
-          application_id: 애플리케이션 ID
-          application_secret: 애플리케이션 비밀번호
+          application_id: OpenProject OAuth Application ID
+          application_secret: OpenProject OAuth Application secret
         oauth_client_form_component:
-          client_id: 클라이언트 ID
+          client_id: Wiki OAuth Client ID
+          client_secret: Wiki OAuth Client secret
+          redirect_uri: Redirect URI
+          redirect_uri_caption: Copy this value into the Redirect URI field of your XWiki OIDC client registration.
       health_status:
         show:
           actions:
@@ -92,10 +109,12 @@ ko:
           title: Health Report
       oauth_application_info_component:
         confirm_replace_oauth_application: 이 작업은 현재 OAuth 자격 증명을 재설정합니다. 확인 후 XWiki 인스턴스에서 자격 증명을 다시 입력해야 하며 모든 사용자가 다시 인증해야 합니다. 계속하시겠습니까?
+        label_oauth_client_id: OAuth Client ID
         label_pending: 대기 중
         replace_oauth_application: OpenProject OAuth 애플리케이션 바꾸기
       oauth_client_info_component:
         confirm_replace_oauth_client: 이 작업은 현재 XWiki OAuth 자격 증명을 재설정합니다. 모든 사용자는 XWiki에 대해 다시 인증해야 합니다. 계속하시겠습니까?
+        label_oauth_client_id: OAuth Client ID
         label_pending: 대기 중
         replace_oauth_client: XWiki OAuth 애플리케이션 바꾸기
       side_panel:
@@ -114,7 +133,7 @@ ko:
         index_description: 외부 위키 서비스를 추가하여 작업 패키지를 기존 위키 페이지에 링크하거나 OpenProject에서 직접 새로운 위키 페이지를 만듭니다.
         label_add_new: 새로운 위키 공급자 추가
         label_edit: XWiki 공급자 편집
-        label_new_xwiki_instance: 새로운 XWiki 공급자
+        label_new_provider: New XWiki provider
         label_wiki_platform: 위키 공급자
         name_caption: 사용자가 여러 위키 플랫폼 간에 구분할 수 있도록 저장소에 이름을 지정하세요.
         name_placeholder: XWiki 지식 베이스
@@ -122,15 +141,14 @@ ko:
         oauth:
           openproject_oauth: OpenProject OAuth
         sections:
-          general_information: 기본 세부 정보
+          general_information: General information
           oauth_configuration: OAuth 구성
         url_caption: https://를 포함하여 위키 플랫폼의 호스트 주소를 추가하세요. 255자 이하여야 합니다.
-        xwiki_instance: XWiki 인스턴스
         xwiki:
           oauth:
             openproject_oauth_description: XWiki가 OAuth 애플리케이션을 사용하여 OpenProject 데이터에 액세스하도록 허용합니다. 아래 자격 증명을 XWiki 인스턴스에 복사합니다.
-            provider_oauth: XWiki OAuth
-            provider_oauth_description: OpenProject가 OAuth를 사용하여 XWiki 데이터에 액세스하도록 허용합니다. XWiki에 대해 OpenProject를 식별하기 위한 클라이언트 ID가 자동으로 생성되므로, XWiki 측에서 수동으로 구성할 필요가 없습니다.
+            provider_oauth: Wiki OAuth
+            provider_oauth_description: Allow OpenProject to access XWiki data using OAuth. A client ID and client secret have been pre-generated for you — copy them along with the redirect URI into your XWiki OIDC client registration. You can change the client ID and secret if needed.
           openproject_oauth_description: XWiki가 OAuth를 사용하여 OpenProject 데이터에 액세스하도록 허용합니다.
           xwiki_oauth: XWiki OAuth
           xwiki_oauth_description: OpenProject가 OAuth를 사용하여 XWiki 데이터에 액세스하도록 허용합니다.

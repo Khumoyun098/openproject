@@ -210,13 +210,6 @@ zh-CN:
           new_date: "(新)"
         add_non_working_day: 非工作日
         already_added_error: 该日期已存在非工作日。每个唯一日期只能创建一个非工作日。
-        change_button: 保存并重新安排
-        change_title: 更改工作日
-        removed_title: 您将从非工作日列表中删除以下日期：
-        change_description: 在这种情况下，更改一周中哪几天被视为工作日或非工作日会影响所有项目中所有工作包和生命周期的开始日期和结束日期。
-        warning: '更改可能需要一些时间才能生效。在所有相关工作包和项目生命周期更新后，您将收到通知。 确定要继续吗？
-
-          '
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: 将进度计算模式从基于状态改为基于工时，将使<i>完成 %</i>字段可自由编辑。如果您选择输入<i>工时</i>或<i>剩余工时</i>的值，它们也将与<i>完成 %</i>相关联。更改<i>剩余工时</i>就可以更新<i>完成 %</i>。
         warning_progress_calculation_mode_change_from_field_to_status_html: 将进度计算模式从基于工时的方式改为基于状态，将会导致所有现有的 <i>%完整的</i> 值丢失，并被与每个状态相关的值所替代。 <i>剩余工时</i> 的现有值也可能被重新计算，以反映这种变化。此操作不可逆转。

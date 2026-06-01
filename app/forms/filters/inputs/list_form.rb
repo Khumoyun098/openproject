@@ -58,7 +58,7 @@ class Filters::Inputs::ListForm < Filters::Inputs::BaseFilterForm
         hideSelected: true,
         defaultData: false,
         hiddenFieldAction: "change->filter--filters-form#autocompleteSendForm"
-      }
+      }.merge(@additional_attributes[:autocomplete_options] || {})
     )
   end
 end

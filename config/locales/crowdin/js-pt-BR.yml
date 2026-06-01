@@ -210,13 +210,6 @@ pt-BR:
           new_date: "(novo)"
         add_non_working_day: Dia não útil
         already_added_error: Já existe um dia não útil para esta data. Só pode haver um dia não útil criado para cada data única.
-        change_button: Salvar e reagendar
-        change_title: Alterar dias úteis
-        removed_title: 'Você removerá os seguintes dias da lista de dias não úteis:'
-        change_description: Alterar quais dias da semana são considerados dias úteis ou não úteis pode afetar as datas de início e término de todos os pacotes de trabalho e ciclos de vida em todos os projetos desta instância.
-        warning: 'As alterações podem levar algum tempo para entrar em vigor. Você será notificado quando todos os pacotes de trabalho e ciclos de vida dos projetos relevantes forem atualizados. Tem certeza de que deseja continuar?
-
-          '
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: Alterar o modo de cálculo de progresso de baseado em status para baseado em trabalho tornará o campo <i>% de conclusão</i> editável livremente. Se você optar por inserir valores para <i>Trabalho</i> ou <i>Trabalho restante</i>, eles também estarão vinculados ao <i>% de conclusão</i>. Alterar <i>Trabalho restante</i> pode, então, atualizar <i>% de conclusão</i>.
         warning_progress_calculation_mode_change_from_field_to_status_html: Alterar o modo de cálculo do progresso de "baseado em trabalho" para "baseado em status" resultará na perda de todos os valores existentes de <i>% de conclusão</i>, que serão substituídos pelos valores associados a cada status. Os valores existentes de <i>Trabalho restante</i> também podem ser recalculados para refletir essa mudança. Essa ação é irreversível.

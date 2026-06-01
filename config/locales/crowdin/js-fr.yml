@@ -210,13 +210,6 @@ fr:
           new_date: "(nouveau)"
         add_non_working_day: Jour non travaillé
         already_added_error: Un jour non travaillé pour cette date existe déjà. Il ne peut y avoir qu'un seul jour non travaillé créé pour chaque date unique.
-        change_button: Enregistrer et reprogrammer
-        change_title: Changer les jours travaillés
-        removed_title: 'Vous supprimerez les jours suivants de la liste des jours non travaillés :'
-        change_description: La modification des jours de la semaine considérés comme des jours ouvrables ou des jours non ouvrables peut affecter les jours de début et de fin de tous les lots de travaux et les cycles de vie de tous les projets dans ce cas.
-        warning: 'Les modifications peuvent prendre un certain temps avant de prendre effet. Vous serez informé(e) lorsque tous les lots de travaux et cycles de vie des projets concernés auront été mis à jour. Voulez-vous continuer ?
-
-          '
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: Passer du mode de calcul de la progression basé sur le statut au mode basé sur le travail transformera <i>% réalisé</i> en champ librement modifiable. Si vous complétez les champs <i>Travail</i> et <i>Travail restant</i>, ils seront également liés à <i>% réalisé</i>. Changer le champ <i>Travail restant</i> peut alors changer le <i>% réalisé</i>.
         warning_progress_calculation_mode_change_from_field_to_status_html: Passer du mode de calcul de la progression basé sur le travail au mode basé sur le statut entraînera la perte de toutes les valeurs de <i>% réalisé</i> existantes et leur remplacement par les valeurs associées à chaque statut. Les valeurs existantes pour <i>Travail restant</i> peuvent également être recalculées pour refléter ce changement. Cette action est irréversible.

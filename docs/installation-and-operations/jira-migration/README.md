@@ -28,18 +28,18 @@ With the [end of life for Jira Data Center](https://www.openproject.org/blog/jir
 This import tool is currently in beta and can only import basic data: 
 
 - Projects
+- Project identifiers
 - Issues (name, title, description, attachments, due date, estimated hours, remaining hours)
+- Issues identifiers (Beta, see [Work package identifiers](../../system-admin-guide/manage-work-packages/work-package-identifiers))
+- Basic custom fields (see [Custom fields migration](./custom-fields/))
 - Users (name, email, project membership)
 - Statuses
 - Types
-- Basic custom fields (see [Custom fields migration](./custom-fields/))
-- Issues identifiers (Beta, see [Work package identifiers](../../system-admin-guide/manage-work-packages/work-package-identifiers))
 
 ## Data not yet covered by the Migrator 
 
 ### Coming soon
 
-- Project identifiers
 - Relations between issues
 - Sprint assignments
 

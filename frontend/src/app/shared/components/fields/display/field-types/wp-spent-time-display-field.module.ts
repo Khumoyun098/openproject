@@ -78,7 +78,7 @@ export class WorkPackageSpentTimeDisplayField extends WorkDisplayField {
           // Link to the cost report having the work package filter preselected. No grouping.
           const href = URI(
             this.PathHelper.projectTimeEntriesPath(
-              project.identifier as string,
+              project.identifier,
             ),
           )
             .search(

@@ -106,7 +106,7 @@ jobs:
           STEPS_EXTRACT_VERSION_OUTPUTS_DOCKER_TAGS: ${{ steps.extract_version.outputs.docker_tags }}
           STEPS_EXTRACT_VERSION_OUTPUTS_REGISTRY_IMAGE: ${{ steps.extract_version.outputs.registry_image }}
       - name: Cache NPM
-        uses: runs-on/cache@bd330c5a5f6cbb837823ee25864f3c71a211c2e3 # v5
+        uses: runs-on/cache@88d90644011a3a9957fd141a106f5a94f9794203 # v5
         with:
           path: |
             frontend/node_modules
@@ -114,7 +114,7 @@ jobs:
           key: nodejs-x64-${{ hashFiles('**/package-lock.json') }}
           restore-keys: nodejs-x64-
       - name: Cache angular
-        uses: runs-on/cache@bd330c5a5f6cbb837823ee25864f3c71a211c2e3 # v5
+        uses: runs-on/cache@88d90644011a3a9957fd141a106f5a94f9794203 # v5
         with:
           path: frontend/.angular
           key: angular-${{ github.ref }}

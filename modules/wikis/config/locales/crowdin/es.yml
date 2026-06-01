@@ -3,15 +3,17 @@ es:
   activerecord:
     attributes:
       wikis/page_link:
+        identifier: Identifier
         provider: Proveedor Wiki
+      wikis/provider:
+        name: Name
+        universal_identifier: Universal identifier
       wikis/xwiki_provider:
         authentication_method: Método de autenticación
         authentication_methods:
           oauth2_sso: Inicio de sesión único a través del proveedor de identidad OpenID Connect
           two_way_oauth2: Flujo de código de autorización bidireccional OAuth 2.0
-        name: Nombre
         token_exchange_scope: Ámbito de XWiki
-        universal_identifier: Identificador universal
         url: URL de instancia
         wiki_audience: Público de XWiki
     errors: {}
@@ -35,8 +37,16 @@ es:
     buttons:
       connect_account: Conectar cuenta de %{provider}
       done_continue: Hecho, continuar
+      open_wiki: Open wiki
       save_and_continue: Guardar y continuar
       wiki_page: Página wiki
+    instructions:
+      xwiki:
+        integration: XWiki Administration
+        oauth_application_details_html: The client secret value will not be accessible again after you close this window. Please copy these values into the [XWiki OpenProject Integration settings](xwiki_admin_link).
+    provider_types:
+      xwiki:
+        name: XWiki
     delete_relation_page_link_confirmation_dialog:
       title: Delete related wiki page link
       heading: Delete related wiki page link?
@@ -57,6 +67,8 @@ es:
     work_package_wikis_tab_component:
       inline_page_links: Enlaces a la página integrada
       referencing_pages: Se hace referencia en
+    link_existing_wiki_page_dialog:
+      title: Add existing wiki page
     page_links:
       errors:
         page_not_found: Linked wiki page no longer available
@@ -65,6 +77,8 @@ es:
     page_link_component:
       remove: Eliminar enlace de página
     relation_page_links_component:
+      link_existing: Existing wiki page
+      link_new: New wiki page
       empty_heading: No hay páginas relacionadas
       empty_text: Añada manualmente enlaces a otras páginas wiki relacionadas.
     oauth_login_component:
@@ -78,12 +92,15 @@ es:
         description_html: The wiki provider %{wiki_provider} and all the related wiki page links will be deleted. In addition, every inline wiki page link will no longer be accessible. This action is irreversible.
       forms:
         general_info_form_component:
-          xwiki_instance_description: Asegúrate de tener permisos de administrador en tu instancia de XWiki antes de realizar la configuración.
+          provider_description: Please make sure you have administration privileges in your XWiki instance before doing the setup.
         oauth_application_form_component:
-          application_id: ID de aplicación
-          application_secret: Secreto de aplicación
+          application_id: OpenProject OAuth Application ID
+          application_secret: OpenProject OAuth Application secret
         oauth_client_form_component:
-          client_id: ID de cliente
+          client_id: Wiki OAuth Client ID
+          client_secret: Wiki OAuth Client secret
+          redirect_uri: Redirect URI
+          redirect_uri_caption: Copy this value into the Redirect URI field of your XWiki OIDC client registration.
       health_status:
         show:
           actions:
@@ -96,10 +113,12 @@ es:
           title: Health Report
       oauth_application_info_component:
         confirm_replace_oauth_application: Esta acción restablecerá las credenciales de OAuth actuales. Una vez confirmada, deberá volver a introducir las credenciales en su instancia de XWiki y todos los usuarios deberán volver a autorizarse. ¿Seguro que desea continuar?
+        label_oauth_client_id: OAuth Client ID
         label_pending: Pendiente
         replace_oauth_application: Sustituir la aplicación OAuth de OpenProject
       oauth_client_info_component:
         confirm_replace_oauth_client: Esta acción restablecerá las credenciales actuales de OAuth de XWiki. Todos los usuarios deberán volver a autorizarse en XWiki. ¿Seguro que desea continuar?
+        label_oauth_client_id: OAuth Client ID
         label_pending: Pendiente
         replace_oauth_client: Sustituir la aplicación XWiki OAuth
       side_panel:
@@ -118,7 +137,7 @@ es:
         index_description: Añade un servicio wiki externo para vincular paquetes de trabajo a páginas wiki existentes o crear otras nuevas directamente desde OpenProject.
         label_add_new: Añadir nuevo proveedor de wiki
         label_edit: Editar proveedor XWiki
-        label_new_xwiki_instance: Nuevo proveedor XWiki
+        label_new_provider: New XWiki provider
         label_wiki_platform: Proveedor Wiki
         name_caption: Ponle un nombre a tu almacenamiento para que los usuarios puedan distinguir entre las distintas plataformas wiki.
         name_placeholder: Base de conocimientos XWiki
@@ -126,15 +145,14 @@ es:
         oauth:
           openproject_oauth: OpenProject OAuth
         sections:
-          general_information: Detalles básicos
+          general_information: General information
           oauth_configuration: Configuración de OAuth
         url_caption: Añade la dirección host de tu plataforma wiki, incluyendo el https://. No debe superar los 255 caracteres.
-        xwiki_instance: Instancia XWiki
         xwiki:
           oauth:
             openproject_oauth_description: Permita que XWiki acceda a los datos de OpenProject mediante una aplicación OAuth. Copie las credenciales que figuran a continuación en su instancia de XWiki.
-            provider_oauth: XWiki OAuth
-            provider_oauth_description: Permita que OpenProject acceda a los datos de XWiki mediante OAuth. Se genera automáticamente un ID de cliente para identificar a OpenProject ante XWiki; no es necesaria ninguna configuración manual por parte de XWiki.
+            provider_oauth: Wiki OAuth
+            provider_oauth_description: Allow OpenProject to access XWiki data using OAuth. A client ID and client secret have been pre-generated for you — copy them along with the redirect URI into your XWiki OIDC client registration. You can change the client ID and secret if needed.
           openproject_oauth_description: Permita que XWiki acceda a los datos de OpenProject utilizando un OAuth.
           xwiki_oauth: XWiki OAuth
           xwiki_oauth_description: Permita que OpenProject acceda a los datos de XWiki mediante OAuth.

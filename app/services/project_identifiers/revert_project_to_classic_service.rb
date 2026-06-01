@@ -53,18 +53,22 @@ module ProjectIdentifiers
     def restore_classic_identifier
       classic_id = identifier_generator.restore_identifier(project) ||
                    identifier_generator.suggest_identifier(project.name)
-      # Suppress notifications: this is a background system operation, not a user edit.
-      Journal::NotificationConfiguration.with(false) do
-        project.update!(identifier: classic_id)
-      rescue ActiveRecord::RecordInvalid => e
-        handle_update_failure(classic_id, e)
-      end
+      save_identifier!(classic_id)
+    rescue ActiveRecord::RecordInvalid, ActiveRecord::RecordNotUnique => e
+      handle_update_failure(classic_id, e)
     end
 
     def handle_update_failure(classic_id, error)
       Rails.logger.warn "#{self.class}: Could not set identifier '#{classic_id}' for project #{project.id}; " \
-                        "falling back to a randomized suffix. (#{error.message})"
-      project.update!(identifier: "project-#{SecureRandom.alphanumeric(5).downcase}")
+                        "falling back to a random identifier. (#{error.message})"
+      save_identifier!("project-#{SecureRandom.alphanumeric(5).downcase}")
+    end
+
+    def save_identifier!(identifier)
+      # Suppress notifications: this is a background system operation, not a user edit.
+      Journal::NotificationConfiguration.with(false) do
+        project.update!(identifier:)
+      end
     end
 
     def identifier_generator

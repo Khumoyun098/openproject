@@ -30,7 +30,9 @@
 
 class ProjectIdentifiers::ConvertProjectToSemanticIdsJob < ApplicationJob
   queue_with_priority :above_normal
-  retry_on StandardError, wait: :polynomially_longer, attempts: 8
+  # Cap at ~16 min of cumulative backoff; this is deemed enough for transient infra issues, and longer wai
+  # increases customer pain due to stuck conversion in the UI
+  retry_on StandardError, wait: :polynomially_longer, attempts: 5
   discard_on ActiveRecord::RecordNotFound
 
   def perform(project_id)

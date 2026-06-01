@@ -187,7 +187,8 @@ export class WorkPackageInlineCreateComponent extends UntilDestroyedMixin implem
         this.untilDestroyed(),
       )
       .subscribe((wp:WorkPackageResource) => {
-        if (this.currentWorkPackage && this.currentWorkPackage.__initialized_at === wp.__initialized_at) {
+        // eslint-disable-next-line no-underscore-dangle
+        if (this.currentWorkPackage?.__initialized_at === wp.__initialized_at) {
           // Remove row and focus
           this.resetRow();
 

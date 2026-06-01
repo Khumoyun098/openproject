@@ -106,11 +106,12 @@ class Filters::Inputs::BaseFilterForm < ApplicationForm
         "filter-name": @filter.name
       }
     ) do |select|
-      @filter.available_operators.each do |op|
+      @filter.available_operators.each do |operator|
         select.option(
-          label: op.human_name,
-          value: op.symbol,
-          selected: op.symbol == selected_operator
+          label: operator.human_name,
+          value: operator.symbol,
+          selected: operator.symbol == selected_operator,
+          **(operator.requires_value? ? {} : { "data-no-value": true })
         )
       end
     end

@@ -238,10 +238,10 @@ gem "yabeda-rails"
 
 # opentelemetry
 gem "opentelemetry-exporter-otlp", "~> 0.34.0", require: false
-gem "opentelemetry-instrumentation-all", "~> 0.93.0", require: false
+gem "opentelemetry-instrumentation-all", "~> 0.94.0", require: false
 gem "opentelemetry-sdk", "~> 1.10", require: false
 
-gem "view_component", "~> 4.10.0"
+gem "view_component", "~> 4.11.0"
 # Lookbook
 gem "lookbook", "2.3.14"
 
@@ -295,7 +295,7 @@ group :test do
   gem "rails-controller-testing", "~> 1.0.2"
 
   gem "capybara", "~> 3.40.0"
-  gem "capybara_accessible_selectors", git: "https://github.com/citizensadvice/capybara_accessible_selectors", tag: "v0.15.0"
+  gem "capybara_accessible_selectors", git: "https://github.com/citizensadvice/capybara_accessible_selectors", tag: "v0.16.0"
   gem "capybara-screenshot", "~> 1.0.17"
   gem "cuprite", "~> 0.17.0"
   gem "rspec-wait"
@@ -431,4 +431,4 @@ end
 
 gem "openproject-octicons", "~>19.35.0"
 gem "openproject-octicons_helper", "~>19.35.0"
-gem "openproject-primer_view_components", "~>0.85.0"
+gem "openproject-primer_view_components", "~>0.86.2"

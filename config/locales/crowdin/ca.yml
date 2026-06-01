@@ -57,7 +57,7 @@ ca:
       col_identifier: Identifier
       col_project: Project
       col_reserved: Reserved
-      not_available_in_semantic_mode: Reserved identifiers are only available in classic identifier mode.
+      not_available_in_semantic_mode: Reserved identifiers are only available in numeric identifier mode.
       filter_label: Filter identifiers
       btn_release: Release
       released_notice: Identifier "%{identifier}" has been released.
@@ -1718,6 +1718,7 @@ ca:
       attachment:
         attachment_content: Adjunta contingut
         attachment_file_name: Nom de fitxer de l'adjunció
+        charset: Character set
         content_type: Content-type
         downloads: Descàrregues
         file: Fitxer
@@ -1812,6 +1813,7 @@ ca:
         title: Title
         description: Description
       member:
+        blocked: Blocked
         roles: Rol
       notification:
         read_ian: Read in-app
@@ -3507,6 +3509,9 @@ ca:
     additional:
       projects: Els projectes més visibles en aquesta instància.
       no_visible_projects: No hi ha projectes visibles en aquesta instància.
+      favorite_projects:
+        no_results: You have no favorite projects
+        no_results_subtext: Add one or multiple projects as favorite through their overview or in a project list.
       users: Els usuaris més nous registrats en aquesta instància.
     blocks:
       community: Comunitat OpenProject
@@ -5342,7 +5347,7 @@ ca:
   setting_welcome_on_homescreen: Mostrar el bloc de benvinguda a la pàgina d'inici
   setting_work_packages_identifier_classic: Instance-wide numerical sequence (default)
   setting_work_packages_identifier_classic_caption: 'Every work package gets a sequential number starting with 1 (for example, #1234). The numbers are unique within the instance and remain the same even if work packages are moved between projects.'
-  setting_work_packages_identifier_semantic: Project-based semantic identifiers
+  setting_work_packages_identifier_semantic: Project-based semantic identifiers (Beta)
   setting_work_packages_identifier_semantic_caption: Every project has a unique project identifier prefixed to a number (for example, PROJ-11). The numbering of each project starts at 1. If a work package is moved to another project, a new identifier is generated but the old one will continue to function.
   setting_work_package_list_default_highlighting_mode: Mètode de destacament per defecte
   setting_work_package_list_default_highlighted_attributes: Atributs de destacament en línia per defecte
@@ -5956,6 +5961,17 @@ ca:
     warning: 'Changing which days of the week are considered working days or non-working days can affect the start and finish days of all work packages and life cycles in all projects in this instance.
 
       '
+    dialog:
+      title: Change working days
+      description: 'Changing which days of the week are considered working days or non-working days can affect the start and finish days of all work packages and life cycles in all projects in this instance.
+
+        '
+      removed_title: 'You will remove the following days from the non-working days list:'
+      warning: 'The changes might take some time to take effect. You will be notified when all relevant work packages and project life cycles have been updated.
+
+        '
+      heading: Change the working days?
+      confirm_button: Save and reschedule
     journal_note:
       changed: _**Dies laborals"" han canviat (%{changes})._
       days:

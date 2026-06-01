@@ -135,12 +135,12 @@ describe('WorkPackageFilterValues', () => {
         setupTestBed();
       });
 
-      it('it should not apply the first value (Regression #30817)', (() => {
+      it('should not apply the first value (Regression #30817)', () => {
         subject.applyDefaultsFromFilters(changeset);
 
         expect(changeset.changedAttributes.length).toEqual(0);
         expect(changeset.value<HalResource>('type').href).toEqual('/api/v3/types/1');
-      }));
+      });
     });
 
     describe('with the second type applied', () => {
@@ -158,12 +158,12 @@ describe('WorkPackageFilterValues', () => {
         setupTestBed();
       });
 
-      it('it should not keep the second value (Regression #30817)', (() => {
+      it('should not keep the second value (Regression #30817)', () => {
         subject.applyDefaultsFromFilters(changeset);
 
         expect(changeset.changedAttributes.length).toEqual(0);
         expect(changeset.value<HalResource>('type').href).toEqual('/api/v3/types/2');
-      }));
+      });
     });
   });
 });

@@ -1,0 +1,25 @@
+<%# `Filters::FilterForm` is a regular primer form object — combine it with %>
+<%# other forms in a single `Primer::Forms::FormList` to share one builder %>
+<%# (and therefore one submission) with non-filter inputs. %>
+<%
+  note_form = Class.new(ApplicationForm) do
+    form do |f|
+      f.text_field(name: :note, label: "Note", scope_name_to_model: false)
+    end
+  end
+%>
+<%= primer_form_with(url: "/foo", method: :post) do |f| %>
+  <%=
+    render(
+      Primer::Forms::FormList.new(
+        note_form.new(f),
+        Filters::FilterForm.new(
+          f,
+          query: query,
+          wrap_with_controller: true,
+          hidden_input_name: "filters"
+        )
+      )
+    )
+  %>
+<% end %>

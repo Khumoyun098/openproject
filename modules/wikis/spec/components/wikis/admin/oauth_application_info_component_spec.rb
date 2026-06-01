@@ -65,9 +65,11 @@ RSpec.describe Wikis::Admin::OAuthApplicationInfoComponent, type: :component do
       expect(page).to have_text(I18n.t(:label_completed))
     end
 
-    it "renders the description" do
+    it "renders the oauth application id" do
       render_inline(described_class.new(wiki_provider))
-      expect(page).to have_text(I18n.t("wikis.admin.wiki_providers.xwiki.oauth.openproject_oauth_description"))
+      expect(page).to have_text(
+        "#{I18n.t('wikis.admin.oauth_application_info_component.label_oauth_client_id')}: #{oauth_application.uid}"
+      )
     end
 
     it "renders a sync button with a confirm dialog" do

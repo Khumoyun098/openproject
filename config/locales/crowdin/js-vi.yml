@@ -210,13 +210,6 @@ vi:
           new_date: "(mới)"
         add_non_working_day: Ngày không làm việc
         already_added_error: Ngày không làm việc cho ngày này đã tồn tại. Chỉ có thể có một ngày không làm việc được tạo cho mỗi ngày duy nhất.
-        change_button: Lưu và lên lịch lại
-        change_title: Thay đổi ngày làm việc
-        removed_title: 'Bạn sẽ xóa những ngày sau khỏi danh sách những ngày không làm việc:'
-        change_description: Việc thay đổi ngày trong tuần được coi là ngày làm việc hay ngày không làm việc có thể ảnh hưởng đến ngày bắt đầu và ngày kết thúc của tất cả các gói công việc và vòng đời trong tất cả các dự án trong trường hợp này.
-        warning: 'Những thay đổi có thể mất một thời gian để có hiệu lực. Bạn sẽ được thông báo khi tất cả các gói công việc có liên quan và vòng đời dự án đã được cập nhật. Bạn có chắc chắn muốn tiếp tục không?
-
-          '
       work_packages_settings:
         warning_progress_calculation_mode_change_from_status_to_field_html: Việc thay đổi chế độ tính toán tiến độ từ dựa trên trạng thái sang dựa trên công việc sẽ làm cho trường <i>% Hoàn thành</i> có thể chỉnh sửa tự do. Nếu bạn tùy ý nhập các giá trị cho <i>Work</i> hoặc <i>Công việc còn lại</i>, thì chúng cũng sẽ được liên kết với <i>% Hoàn thành</i>. Việc thay đổi <i>Công việc còn lại</i> sau đó có thể cập nhật <i>% Hoàn thành</i>.
         warning_progress_calculation_mode_change_from_field_to_status_html: Việc thay đổi chế độ tính toán tiến độ từ dựa trên công việc sang dựa trên trạng thái sẽ khiến tất cả các giá trị <i>% Hoàn thành</i> hiện có bị mất và được thay thế bằng các giá trị được liên kết với từng trạng thái. Các giá trị hiện tại cho <i>Công việc còn lại</i> cũng có thể được tính toán lại để phản ánh sự thay đổi này. Hành động này không thể đảo ngược.

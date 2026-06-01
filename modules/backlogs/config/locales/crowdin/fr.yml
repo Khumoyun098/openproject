@@ -114,7 +114,7 @@ fr:
       select_sprint_label: Sélectionnez le sprint
       button_complete_sprint: Terminer le sprint
     inbox_component:
-      title: Inbox
+      title: Boîte de réception
       blankslate_title: La boîte de réception de backlog est vide
       blankslate_description: Tous les lots de travaux ouverts dans ce projet apparaîtront automatiquement ici.
       show_more:
@@ -140,8 +140,8 @@ fr:
       blankslate_title: "%{name} est vide"
       blankslate_description: Aucun élément n'a encore été planifié. Faites glisser les éléments ici pour les ajouter.
       label_actions: Actions du sprint
-      label_start_sprint: Start sprint
-      label_complete_sprint: Complete sprint
+      label_start_sprint: Démarrer le sprint
+      label_complete_sprint: Terminer le sprint
       start_sprint_disabled_reason_active_sprint: Un autre sprint est déjà en cours.
       start_sprint_disabled_reason_missing_dates: Les dates de début et de fin sont nécessaires pour lancer le sprint.
       action_menu:
@@ -176,17 +176,17 @@ fr:
         invalid_direction: 'direction must be one of: higher, highest, lower, lowest.'
     work_package_card_menu_component:
       action_menu:
-        copy_url_to_clipboard: Copy URL to clipboard
-        copy_work_package_id: Copy work package ID
-        move_menu: Move
-        move_to_sprint: Move to sprint
+        copy_url_to_clipboard: Copier l'URL dans le presse-papier
+        copy_work_package_id: Copier l'ID du lot de travaux
+        move_menu: Déplacer
+        move_to_sprint: Déplacer dans le sprint
     work_package_is_closed: Le lot de travaux est fait lorsque
   burndown:
     story_points: Story points
     story_points_ideal: Story points (idéal)
   ee:
     features:
-      sprint_sharing: Sprint sharing
+      sprint_sharing: Partage de sprint
     upsell:
       sprint_sharing:
         description: Share sprints across projects to align teams and coordinate work in scaled agile setups (SAFe).
@@ -211,8 +211,8 @@ fr:
   notice_unsuccessful_finish_with_reason: 'Le sprint n''a pas pu être achevé : %{reason}'
   permission_create_sprints: Créer des sprints
   permission_manage_sprint_items: Gérer les éléments du sprint
-  permission_select_backlog_types_and_statuses: Select backlog types and statuses
-  permission_select_backlog_types_and_statuses_explanation: 'Allows choosing which work package types to hide from the backlog. Also allows defining which statuses represent a closed or finished state in the project''s workflow.
+  permission_select_backlog_types_and_statuses: Sélectionner les types et les statuts du backlog
+  permission_select_backlog_types_and_statuses_explanation: 'Permet de choisir les types de lots de travaux à masquer dans le backlog. Permet également de définir quels statuts représentent un état fermé ou terminé dans le flux de travail du projet.
 
     '
   permission_share_sprint: Partager le sprint
