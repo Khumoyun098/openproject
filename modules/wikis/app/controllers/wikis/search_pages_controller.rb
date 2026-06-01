@@ -30,31 +30,26 @@
 
 module Wikis
   class SearchPagesController < ApplicationController
+    include Dry::Monads[:result]
+
     no_authorization_required! :show
 
     def show
       provider = Provider.find(params.expect(:provider_id))
       query = params[:query]
-
-      @results = [
-        Adapters::Results::PageInfo.new(title: "Stormtrooper Basic Gear",
-                                        href: "#", provider: nil, identifier: "Stormtrooper_Basic_Gear"),
-        Adapters::Results::PageInfo.new(title: "How to fight a Jedi - FanFiction",
-                                        href: "#", provider: nil, identifier: "fight_jedi"),
-        Adapters::Results::PageInfo.new(title: "E-11 - A practical guide",
-                                        href: "#", provider: nil, identifier: "e11_guide"),
-        Adapters::Results::PageInfo.new(title: "Technical specification of Death Star beam weapon",
-                                        href: "#", provider: nil, identifier: "beam_spec")
-      ].sample(2)
+      form_name = params[:name]
+      builder = ActionView::Helpers::FormBuilder.new("", nil, view_context, {})
 
       @search_result = search_pages(query, provider)
 
-      render layout: false
+      render layout: false, locals: { builder:, name: form_name }
     end
 
     private
 
     def search_pages(query, provider)
+      return Success([]) if query.blank?
+
       Adapters::Input::SearchPages.build(query:).bind do |input_data|
         provider.auth_strategy_for(current_user).bind do |auth_strategy|
           provider.resolve("queries.search_pages").call(input_data:, auth_strategy:)

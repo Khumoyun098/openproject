@@ -27,6 +27,24 @@ See COPYRIGHT and LICENSE files for more details.
 
 ++#%>
 
-<turbo-frame id="<%= ::Wikis::LinkExistingWikiPageDialog::SEARCH_RESULTS_FRAME_ID %>">
-  <%= render(::Wikis::PageSearchResults.new(@search_result)) %>
-</turbo-frame>
+<%=
+  @search_result.either(
+    ->(pages) do
+      render(
+        Primer::Alpha::TreeView.new(
+          form_arguments: { builder:, name: },
+          data: { target: "filterable-tree-view.treeViewList" }
+        )
+      ) do |tree_view|
+        pages.each do |page|
+          tree_view.with_leaf(select_variant: :single, label: page.title, value: page.identifier)
+        end
+      end
+    end,
+    ->(_failure) do
+      render(Primer::Alpha::TreeView.new(data: { target: "filterable-tree-view.treeViewList" })) do |tree_view|
+        tree_view.with_leaf(select_variant: :none, label: t("wikis.link_existing_wiki_page_dialog.no_results"))
+      end
+    end
+  )
+%>

@@ -34,17 +34,6 @@ module Wikis
       f.hidden(name: :provider_id)
       f.hidden(name: :linkable_type)
       f.hidden(name: :linkable_id)
-      f.hidden(
-        name: :identifier,
-        data: { wikis__add_existing_page_target: "identifierInput" }
-      )
-
-      # f.text_field(
-      #   name: :identifier,
-      #   label: RelationPageLink.human_attribute_name(:identifier),
-      #   required: true,
-      #   input_width: :large
-      # )
     end
   end
 end

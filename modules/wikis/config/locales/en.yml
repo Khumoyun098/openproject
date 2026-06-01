@@ -69,6 +69,7 @@ en:
       referencing_pages: Referenced in
     link_existing_wiki_page_dialog:
       title: Add existing wiki page
+      no_results: No wiki pages found
     page_links:
       errors:
         page_not_found: Linked wiki page no longer available
