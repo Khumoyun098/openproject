@@ -47,7 +47,8 @@ class WorkPackages::ActivitiesTabController < ApplicationController
         journals: @paginated_journals,
         paginator: @paginator,
         filter: @filter,
-        last_server_timestamp: get_current_server_timestamp
+        last_server_timestamp: get_current_server_timestamp,
+        resolved_anchor: @resolved_anchor
       ),
       layout: false
     )
@@ -208,8 +209,9 @@ class WorkPackages::ActivitiesTabController < ApplicationController
   end
 
   def initialize_pagination
-    @paginator, @paginated_journals = WorkPackages::ActivitiesTab::Paginator
-      .paginate(@work_package, params.merge(filter: @filter, limit: 20))
+    paginator = WorkPackages::ActivitiesTab::Paginator.new(@work_package, params.merge(filter: @filter, limit: 20))
+    @paginator, @paginated_journals = paginator.call
+    @resolved_anchor = paginator.resolved_anchor
   end
 
   def respond_with_error(error_message)
@@ -237,7 +239,6 @@ class WorkPackages::ActivitiesTabController < ApplicationController
     @journal = @work_package
       .journals
       .internal_visible
-      .with_sequence_version
       .find(params[:id])
   rescue ActiveRecord::RecordNotFound
     respond_with_error(I18n.t("label_not_found"))
@@ -317,7 +318,8 @@ class WorkPackages::ActivitiesTabController < ApplicationController
         journals: @paginated_journals,
         paginator: @paginator,
         filter: @filter,
-        last_server_timestamp: get_current_server_timestamp
+        last_server_timestamp: get_current_server_timestamp,
+        resolved_anchor: @resolved_anchor
       )
     )
   end
@@ -359,7 +361,6 @@ class WorkPackages::ActivitiesTabController < ApplicationController
     journals = @work_package
                  .journals
                  .internal_visible
-                 .with_sequence_version
 
     if @filter == :only_comments
       journals = journals.where.not(notes: "")
@@ -407,7 +408,7 @@ class WorkPackages::ActivitiesTabController < ApplicationController
         next if editing_journals.include?(notification.journal_id)
 
         update_item_show_component(
-          journal: journals.find(notification.journal_id), # take the journal from the journals querried with sequence_version!
+          journal: journals.find(notification.journal_id),
           grouped_emoji_reactions: grouped_emoji_reactions.fetch(notification.journal_id, {})
         )
       end

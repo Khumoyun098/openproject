@@ -198,26 +198,34 @@ RSpec.describe WorkPackages::ActivitiesTab::Paginator, with_settings: { journal_
             expect(pagy.page).to eq(2)
             expect(records.map(&:id)).to include(journal_1.id)
           end
+
+          it "leaves resolved_anchor nil for comment anchors" do
+            params[:anchor] = "comment-#{journal_1.id}"
+            paginator.call
+
+            expect(paginator.resolved_anchor).to be_nil
+          end
         end
 
         context "with activity anchor" do
-          it "returns the page containing the target activity by sequence_version" do
+          it "returns the page containing the target activity and resolves it to the comment id" do
             params[:anchor] = "activity-2"
             pagy, records = paginator.call
 
-            # activity-2 corresponds to journal with sequence_version 2
-            # which should be journal_1
+            # activity-2 is the journal with sequence_version 2, i.e. journal_1
             expect(pagy.page).to eq(2)
-            wrapped_journal = records.find { it.is_a?(API::V3::Activities::ActivityEagerLoadingWrapper) && it.id == journal_1.id }
-            expect(wrapped_journal.sequence_version).to eq(2)
+            expect(records.map(&:id)).to include(journal_1.id)
+            expect(paginator.resolved_anchor).to eq(journal_1.id)
           end
 
-          it "handles activity anchor for initial journal" do
+          it "handles an activity anchor for the initial journal" do
             params[:anchor] = "activity-1"
             _pagy, records = paginator.call
 
-            # activity-1 should be on the last page (oldest)
-            expect(records.any? { it.respond_to?(:sequence_version) && it.sequence_version == 1 }).to be(true)
+            # activity-1 is the oldest journal, on the last page
+            initial_journal = work_package.journals.order(:version).first
+            expect(records.map(&:id)).to include(initial_journal.id)
+            expect(paginator.resolved_anchor).to eq(initial_journal.id)
           end
         end
       end
@@ -257,6 +265,24 @@ RSpec.describe WorkPackages::ActivitiesTab::Paginator, with_settings: { journal_
         expect(recorder.count).to be < 20,
                                   "expected query count bounded regardless of history; got #{recorder.count}:\n" \
                                   "#{recorder.log.join("\n")}"
+      end
+
+      it "skips the sequence-version window function on the default render path" do
+        recorder = ActiveRecord::QueryRecorder.new do
+          described_class.new(work_package, params).call
+        end
+
+        expect(recorder.log.join("\n")).not_to match(/ROW_NUMBER|JOIN LATERAL/i),
+                                               "expected no window function without an activity anchor:\n" \
+                                               "#{recorder.log.join("\n")}"
+      end
+
+      it "computes the sequence version only when resolving an activity anchor" do
+        recorder = ActiveRecord::QueryRecorder.new do
+          described_class.new(work_package, params.merge(anchor: "activity-2")).call
+        end
+
+        expect(recorder.log.join("\n")).to match(/ROW_NUMBER|JOIN LATERAL/i)
       end
     end
 
@@ -392,11 +418,12 @@ RSpec.describe WorkPackages::ActivitiesTab::Paginator, with_settings: { journal_
           expect(pagy.page).to eq(1)
         end
 
-        it "falls back to page 1 when anchoring to an internal journal by sequence_version" do
-          params[:anchor] = "activity-#{internal_sequence_version}"
-          pagy, _records = described_class.new(work_package, params).call
+        it "falls back to page 1 and resolves no anchor for an internal journal by sequence_version" do
+          paginator = described_class.new(work_package, params.merge(anchor: "activity-#{internal_sequence_version}"))
+          pagy, _records = paginator.call
 
           expect(pagy.page).to eq(1)
+          expect(paginator.resolved_anchor).to be_nil
         end
       end
     end

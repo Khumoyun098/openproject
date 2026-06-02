@@ -37,8 +37,10 @@
 # - :only_changes - Shows only journals with detected changes using SQL heuristics
 #
 # Anchor format:
-# - "comment-{journal_id}" - Navigate to specific journal by ID
-# - "activity-{sequence_version}" - Navigate to journal by sequence version
+# - "comment-{journal_id}" - Navigate to a specific journal by id
+# - "activity-{sequence_version}" - Legacy alias resolved on demand to the
+#   journal's comment id; the sequence version is computed only for this lookup,
+#   never for the rendered page, so the default feed avoids the window function.
 #
 # Anchored navigation bypasses the active filter so a deep link to a record
 # that wouldn't match the filter still resolves.
@@ -64,12 +66,13 @@ class WorkPackages::ActivitiesTab::Paginator
     new(work_package, params).call
   end
 
-  attr_reader :work_package, :params, :filter
+  attr_reader :work_package, :params, :filter, :resolved_anchor
 
   def initialize(work_package, params = {})
     @work_package = work_package
     @params = params
     @filter = params[:filter]&.to_sym || :all
+    @resolved_anchor = nil
   end
 
   def call
@@ -160,6 +163,11 @@ class WorkPackages::ActivitiesTab::Paginator
     activity_at, anchor_id = locate_anchor(anchor_type, target_record_id)
     return nil unless activity_at && anchor_id
 
+    # A comment anchor already matches the DOM's data-anchor-comment-id. An
+    # activity anchor has no rendered counterpart, so hand the comment id it
+    # resolved to back to the client to scroll to instead.
+    @resolved_anchor = anchor_id if anchor_type.activity?
+
     rows_ahead = scope
       .where("(journals.created_at, journals.id) > (?, ?)", activity_at, anchor_id)
       .count(:all)
@@ -195,7 +203,6 @@ class WorkPackages::ActivitiesTab::Paginator
 
   def page_journals(page_relation)
     page_relation
-      .with_sequence_version
       .includes(:user, :customizable_journals, :attachable_journals, :storable_journals, :notifications, :attachments)
       .to_a
   end
